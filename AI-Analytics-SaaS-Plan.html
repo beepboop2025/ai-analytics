@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Data Analytics SaaS — Complete Build Plan</title>
+<style>
+  @page {
+    size: A4;
+    margin: 1.5cm 2cm;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    color: #1a1a2e;
+    background: #fff;
+    font-size: 11pt;
+  }
+
+  /* Cover Page */
+  .cover {
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+  .cover-icon {
+    font-size: 64px;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .cover h1 {
+    font-size: 36pt;
+    font-weight: 800;
+    background: linear-gradient(135deg, #1a1a2e, #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+  }
+  .cover .subtitle {
+    font-size: 16pt;
+    color: #64748b;
+    margin-bottom: 3rem;
+  }
+  .cover-meta {
+    font-size: 11pt;
+    color: #94a3b8;
+    border-top: 2px solid #e2e8f0;
+    padding-top: 2rem;
+    margin-top: auto;
+  }
+  .cover-meta strong { color: #475569; }
+
+  /* Table of Contents */
+  .toc {
+    page-break-after: always;
+    padding: 2rem 0;
+  }
+  .toc h2 {
+    font-size: 20pt;
+    color: #1a1a2e;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid #6366f1;
+  }
+  .toc-list { list-style: none; }
+  .toc-list li {
+    padding: 0.6rem 0;
+    border-bottom: 1px dotted #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+  }
+  .toc-list li .num {
+    font-weight: 700;
+    color: #6366f1;
+    margin-right: 0.75rem;
+  }
+  .toc-list li .page { color: #94a3b8; }
+
+  /* Section Headers */
+  h2 {
+    font-size: 18pt;
+    color: #1a1a2e;
+    margin: 2rem 0 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid #6366f1;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 14pt;
+    color: #374151;
+    margin: 1.5rem 0 0.5rem;
+    page-break-after: avoid;
+  }
+  h4 {
+    font-size: 12pt;
+    color: #4b5563;
+    margin: 1rem 0 0.4rem;
+  }
+
+  p { margin: 0.5rem 0; color: #374151; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 10pt;
+  }
+  th {
+    background: #6366f1;
+    color: white;
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  tr:nth-child(even) { background: #f8fafc; }
+  tr:hover { background: #f1f5f9; }
+
+  /* Code blocks */
+  pre {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 9pt;
+    line-height: 1.5;
+    margin: 0.75rem 0;
+  }
+  code {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 9pt;
+  }
+  :not(pre) > code {
+    background: #f1f5f9;
+    color: #6366f1;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+  }
+
+  /* Info boxes */
+  .box {
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    page-break-inside: avoid;
+  }
+  .box-blue { background: #eff6ff; border-left: 4px solid #3b82f6; }
+  .box-green { background: #f0fdf4; border-left: 4px solid #22c55e; }
+  .box-amber { background: #fffbeb; border-left: 4px solid #f59e0b; }
+  .box-purple { background: #faf5ff; border-left: 4px solid #8b5cf6; }
+  .box-title {
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    font-size: 11pt;
+  }
+
+  /* Flow diagrams */
+  .flow {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin: 1rem 0;
+    font-family: 'SF Mono', monospace;
+    font-size: 9pt;
+    line-height: 1.6;
+    white-space: pre;
+  }
+
+  /* Lists */
+  ul, ol { margin: 0.5rem 0 0.5rem 1.5rem; }
+  li { margin: 0.3rem 0; }
+
+  /* Page breaks */
+  .page-break { page-break-before: always; }
+
+  /* Feature grid */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  .feature-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    page-break-inside: avoid;
+  }
+  .feature-card h4 { margin-top: 0; color: #6366f1; }
+
+  /* Phase header */
+  .phase-header {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0 1rem;
+    page-break-after: avoid;
+  }
+  .phase-header h2 {
+    color: white;
+    border: none;
+    margin: 0;
+    padding: 0;
+    font-size: 16pt;
+  }
+  .phase-header .desc {
+    opacity: 0.9;
+    font-size: 10pt;
+    margin-top: 0.25rem;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 12px;
+    font-size: 9pt;
+    font-weight: 600;
+  }
+  .badge-purple { background: #ede9fe; color: #7c3aed; }
+  .badge-blue { background: #dbeafe; color: #2563eb; }
+  .badge-green { background: #dcfce7; color: #16a34a; }
+  .badge-amber { background: #fef3c7; color: #d97706; }
+</style>
+</head>
+<body>
+
+<!-- ==================== COVER PAGE ==================== -->
+<div class="cover">
+  <div class="cover-icon">&#9672;</div>
+  <h1>AI Data Analytics SaaS</h1>
+  <p class="subtitle">Complete Technical Build Plan &amp; Architecture Guide</p>
+  <p style="color: #64748b; max-width: 500px; margin: 0 auto 2rem;">
+    A production-ready AI-powered data analytics platform with marketing site,
+    authentication, billing, admin panel, and full analytics stack.
+  </p>
+  <div style="display: flex; gap: 2rem; margin: 2rem 0;">
+    <div style="text-align: center;">
+      <div style="font-size: 28pt; font-weight: 800; color: #6366f1;">~85</div>
+      <div style="color: #94a3b8; font-size: 10pt;">Files</div>
+    </div>
+    <div style="text-align: center;">
+      <div style="font-size: 28pt; font-weight: 800; color: #6366f1;">9</div>
+      <div style="color: #94a3b8; font-size: 10pt;">Phases</div>
+    </div>
+    <div style="text-align: center;">
+      <div style="font-size: 28pt; font-weight: 800; color: #6366f1;">12+</div>
+      <div style="color: #94a3b8; font-size: 10pt;">Integrations</div>
+    </div>
+  </div>
+  <div class="cover-meta">
+    <strong>Project Directory:</strong> /Users/mrinal/Documents/ai-analytics<br>
+    <strong>Date:</strong> February 18, 2026<br>
+    <strong>Framework:</strong> Next.js 15 &middot; TypeScript &middot; Tailwind CSS 4
+  </div>
+</div>
+
+<!-- ==================== TABLE OF CONTENTS ==================== -->
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol class="toc-list">
+    <li><span><span class="num">1</span> Executive Summary &amp; Product Overview</span></li>
+    <li><span><span class="num">2</span> Technology Stack &amp; Rationale</span></li>
+    <li><span><span class="num">3</span> Project Structure &amp; Architecture</span></li>
+    <li><span><span class="num">4</span> Database Schema Design</span></li>
+    <li><span><span class="num">5</span> Phase 1: Project Foundation</span></li>
+    <li><span><span class="num">6</span> Phase 2: Authentication System</span></li>
+    <li><span><span class="num">7</span> Phase 3: Marketing Site</span></li>
+    <li><span><span class="num">8</span> Phase 4: Application Dashboard</span></li>
+    <li><span><span class="num">9</span> Phase 5: API Routes</span></li>
+    <li><span><span class="num">10</span> Phase 6: AI Engine</span></li>
+    <li><span><span class="num">11</span> Phase 7: Analytics &amp; Marketing Pixels</span></li>
+    <li><span><span class="num">12</span> Phase 8: Admin Panel</span></li>
+    <li><span><span class="num">13</span> Phase 9: Polish &amp; Deployment</span></li>
+    <li><span><span class="num">14</span> Pricing &amp; Business Model</span></li>
+    <li><span><span class="num">15</span> Data Flow Architecture</span></li>
+    <li><span><span class="num">16</span> Security Considerations</span></li>
+    <li><span><span class="num">17</span> Verification &amp; Testing Checklist</span></li>
+  </ol>
+</div>
+
+<!-- ==================== 1. EXECUTIVE SUMMARY ==================== -->
+<div class="page-break"></div>
+<h2>1. Executive Summary &amp; Product Overview</h2>
+
+<p>
+  This document outlines the complete technical plan for building an AI-powered Data Analytics SaaS platform.
+  The product enables users to upload datasets in CSV, Excel, and JSON formats, analyze them using AI
+  (powered by Anthropic's Claude API), generate interactive visualizations, and create comprehensive reports
+  through natural language queries.
+</p>
+
+<h3>What the Product Does</h3>
+<div class="feature-grid">
+  <div class="feature-card">
+    <h4>Dataset Management</h4>
+    <p>Upload CSV, Excel, and JSON files. The system auto-detects schemas, data types,
+    and generates previews. Datasets are stored securely and linked to user accounts.</p>
+  </div>
+  <div class="feature-card">
+    <h4>AI-Powered Analysis</h4>
+    <p>Chat with your data using natural language. Claude AI analyzes datasets, identifies
+    patterns, suggests insights, and generates statistical summaries automatically.</p>
+  </div>
+  <div class="feature-card">
+    <h4>Smart Visualizations</h4>
+    <p>AI recommends the best chart types for your data. Interactive Recharts-powered
+    visualizations with export capabilities for reports and presentations.</p>
+  </div>
+  <div class="feature-card">
+    <h4>Report Generation</h4>
+    <p>Compile multiple analyses into structured reports. Export as PDF or share
+    via link. Reports include charts, insights, and data summaries.</p>
+  </div>
+</div>
+
+<h3>Target Users</h3>
+<ul>
+  <li><strong>Business Analysts</strong> — who need quick insights without writing SQL or Python</li>
+  <li><strong>Product Managers</strong> — who want to explore metrics and generate reports for stakeholders</li>
+  <li><strong>Small Business Owners</strong> — who have spreadsheet data but lack analytical expertise</li>
+  <li><strong>Data Teams</strong> — who want AI-assisted exploration as a complement to their existing tools</li>
+</ul>
+
+<h3>Platform Architecture Overview</h3>
+<p>The platform is divided into four main sections, each with its own layout:</p>
+<ul>
+  <li><strong>Marketing Site</strong> <span class="badge badge-blue">(marketing)</span> — Public-facing landing page, pricing, and SEO-optimized content</li>
+  <li><strong>Auth Pages</strong> <span class="badge badge-amber">(auth)</span> — Login, signup, password reset with centered minimal layout</li>
+  <li><strong>App Dashboard</strong> <span class="badge badge-green">(app)</span> — Protected workspace with sidebar navigation for authenticated users</li>
+  <li><strong>Admin Panel</strong> <span class="badge badge-purple">(admin)</span> — Administrative controls for user management, revenue tracking, and platform health</li>
+</ul>
+
+<!-- ==================== 2. TECH STACK ==================== -->
+<div class="page-break"></div>
+<h2>2. Technology Stack &amp; Rationale</h2>
+
+<p>Every technology choice is deliberate, optimized for a serverless-first SaaS that can scale from zero to production with minimal operational overhead.</p>
+
+<table>
+  <thead>
+    <tr><th>Layer</th><th>Technology</th><th>Rationale</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Framework</strong></td>
+      <td>Next.js 15 (App Router)</td>
+      <td>Server-side rendering for marketing SEO, API routes for backend, React Server Components for performance, middleware for auth guards. App Router's route groups enable separate layouts per section.</td>
+    </tr>
+    <tr>
+      <td><strong>Language</strong></td>
+      <td>TypeScript</td>
+      <td>Type safety across the full stack — Prisma generates types from DB schema, API routes have typed request/response, components have typed props. Catches bugs at compile time rather than production.</td>
+    </tr>
+    <tr>
+      <td><strong>Styling</strong></td>
+      <td>Tailwind CSS 4 + shadcn/ui</td>
+      <td>Tailwind 4 uses CSS-first config (no tailwind.config.ts). shadcn/ui provides accessible, customizable components that are copied into the project (not a dependency), giving full control. Dark mode via CSS variables.</td>
+    </tr>
+    <tr>
+      <td><strong>Auth</strong></td>
+      <td>Auth.js v5 (NextAuth)</td>
+      <td>JWT sessions for serverless (no session DB lookups), supports Google OAuth + email/password + magic links. Prisma adapter auto-manages Account/Session tables. Built-in CSRF protection.</td>
+    </tr>
+    <tr>
+      <td><strong>Database</strong></td>
+      <td>PostgreSQL (Neon) + Prisma</td>
+      <td>Neon provides serverless Postgres with auto-scaling and a generous free tier. Prisma ORM gives type-safe queries, auto-generated migrations, and a visual studio for DB exploration.</td>
+    </tr>
+    <tr>
+      <td><strong>Payments</strong></td>
+      <td>Stripe</td>
+      <td>Industry standard for SaaS billing. Handles subscription lifecycle, payment collection, invoicing, tax calculation, and customer portal. Webhook-driven architecture ensures data consistency.</td>
+    </tr>
+    <tr>
+      <td><strong>AI</strong></td>
+      <td>Anthropic Claude API</td>
+      <td>200K context window handles large datasets. Structured output for chart configs. Superior instruction following for data analysis prompts. Cost-effective for analytical workloads.</td>
+    </tr>
+    <tr>
+      <td><strong>Analytics</strong></td>
+      <td>GTM + GA4 + PostHog + Pixels</td>
+      <td>GTM as universal container — add/remove ad pixels without code changes. PostHog for product analytics (session replay, funnels, feature flags). Dual tracking ensures both marketing and product teams have the data they need.</td>
+    </tr>
+    <tr>
+      <td><strong>File Storage</strong></td>
+      <td>Vercel Blob</td>
+      <td>Serverless file storage with CDN distribution. No S3 configuration needed. Integrates natively with Next.js API routes.</td>
+    </tr>
+    <tr>
+      <td><strong>Charts</strong></td>
+      <td>Recharts</td>
+      <td>React-native charting library. Declarative API makes it easy for AI to generate chart configurations. Supports all common chart types (bar, line, area, pie, scatter).</td>
+    </tr>
+    <tr>
+      <td><strong>Deployment</strong></td>
+      <td>Vercel</td>
+      <td>Zero-config deployment from Git. Edge middleware for auth, built-in CDN, automatic HTTPS, preview deployments for every PR.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="box box-blue">
+  <div class="box-title">Why Serverless-First?</div>
+  <p>
+    Every component (Neon DB, Vercel Functions, Vercel Blob, Stripe) scales to zero when idle and auto-scales
+    under load. This means <strong>$0/month cost at zero users</strong> and linear cost scaling as the user base
+    grows. No servers to manage, no containers to orchestrate — ideal for a launch-stage SaaS.
+  </p>
+</div>
+
+<!-- ==================== 3. PROJECT STRUCTURE ==================== -->
+<div class="page-break"></div>
+<h2>3. Project Structure &amp; Architecture</h2>
+
+<h3>Directory Layout</h3>
+<p>The project follows Next.js 15 App Router conventions with route groups for layout isolation:</p>
+
+<pre><code>ai-analytics/
+├── prisma/
+│   └── schema.prisma              # Database schema (7 models)
+├── public/
+│   └── images/                    # Static assets, logos, OG images
+├── src/
+│   ├── app/
+│   │   ├── (marketing)/           # Route group: public marketing pages
+│   │   │   ├── page.tsx           # Landing page (/)
+│   │   │   ├── pricing/page.tsx   # Pricing page (/pricing)
+│   │   │   └── layout.tsx         # Marketing Navbar + Footer
+│   │   ├── (auth)/                # Route group: auth pages
+│   │   │   ├── login/page.tsx     # Login (/login)
+│   │   │   ├── signup/page.tsx    # Signup (/signup)
+│   │   │   ├── forgot-password/page.tsx
+│   │   │   └── layout.tsx         # Centered, minimal layout
+│   │   ├── (app)/                 # Route group: protected app
+│   │   │   ├── dashboard/page.tsx # Overview (/dashboard)
+│   │   │   ├── datasets/page.tsx  # Dataset management (/datasets)
+│   │   │   ├── analyze/page.tsx   # AI workspace (/analyze)
+│   │   │   ├── reports/page.tsx   # Report gallery (/reports)
+│   │   │   ├── settings/page.tsx  # User settings (/settings)
+│   │   │   ├── billing/page.tsx   # Billing management (/billing)
+│   │   │   └── layout.tsx         # Sidebar + Topbar shell
+│   │   ├── (admin)/               # Route group: admin panel
+│   │   │   ├── admin/page.tsx     # Admin dashboard (/admin)
+│   │   │   ├── admin/users/page.tsx  # User management (/admin/users)
+│   │   │   └── layout.tsx         # Admin sidebar
+│   │   ├── api/                   # API routes (serverless functions)
+│   │   │   ├── auth/[...nextauth]/route.ts
+│   │   │   ├── stripe/            # Checkout, portal, webhook
+│   │   │   ├── ai/                # Analyze, query
+│   │   │   ├── datasets/          # CRUD + upload
+│   │   │   └── admin/             # Users, stats
+│   │   ├── layout.tsx             # Root layout (providers, GTM, metadata)
+│   │   └── globals.css            # Tailwind 4 base styles
+│   ├── components/
+│   │   ├── ui/                    # shadcn/ui primitives
+│   │   ├── marketing/             # Hero, Features, Testimonials, Footer
+│   │   ├── dashboard/             # Stats, charts, activity feed
+│   │   ├── datasets/              # Dropzone, table, preview
+│   │   ├── analyze/               # Chat interface, chart renderer
+│   │   ├── auth/                  # Login/signup forms
+│   │   └── shared/                # Navbar, Sidebar, UserMenu, ThemeToggle
+│   ├── lib/
+│   │   ├── auth.ts                # Auth.js v5 configuration
+│   │   ├── prisma.ts              # Prisma client singleton
+│   │   ├── stripe.ts              # Stripe helpers
+│   │   ├── ai.ts                  # Claude API service
+│   │   ├── upload.ts              # File parsing (CSV/Excel/JSON)
+│   │   └── analytics/             # GTM, PostHog, unified events
+│   ├── hooks/                     # React hooks
+│   ├── types/                     # TypeScript type definitions
+│   └── middleware.ts              # Route protection middleware
+├── .env.example
+├── next.config.ts
+├── tailwind.config.ts
+├── package.json
+└── tsconfig.json</code></pre>
+
+<div class="box box-purple">
+  <div class="box-title">Route Groups Explained</div>
+  <p>
+    Parenthesized folders like <code>(marketing)</code> create <strong>route groups</strong> in Next.js App Router.
+    They organize routes with shared layouts without affecting the URL path. So <code>(marketing)/pricing/page.tsx</code>
+    maps to <code>/pricing</code>, not <code>/marketing/pricing</code>. This lets each section have its own
+    <code>layout.tsx</code> — marketing gets a navbar+footer, the app gets a sidebar, auth gets a centered card.
+  </p>
+</div>
+
+<!-- ==================== 4. DATABASE SCHEMA ==================== -->
+<div class="page-break"></div>
+<h2>4. Database Schema Design</h2>
+
+<p>The database uses 7 core models managed by Prisma ORM. The schema is designed for a multi-tenant SaaS
+with subscription-based access control.</p>
+
+<h3>Entity Relationship Overview</h3>
+<div class="flow">User ──┬── Subscription (1:1) ──── Stripe Customer/Subscription
+       ├── Dataset[] (1:many) ──── Report[] (1:many per dataset)
+       ├── Account[] (1:many) ──── OAuth providers (Google, etc.)
+       ├── Session[] (1:many) ──── Active sessions
+       └── AuditLog[] (1:many) ──── Action history</div>
+
+<h3>Model Details</h3>
+
+<h4>User Model</h4>
+<p>Central entity. Stores identity, role, and links to all user-owned resources.</p>
+<table>
+  <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>id</td><td>String (CUID)</td><td>Primary key, collision-resistant unique ID</td></tr>
+    <tr><td>name</td><td>String?</td><td>Display name (optional for OAuth users)</td></tr>
+    <tr><td>email</td><td>String (unique)</td><td>Primary identifier, used for login</td></tr>
+    <tr><td>password</td><td>String?</td><td>bcrypt hash, null for OAuth-only users</td></tr>
+    <tr><td>role</td><td>Enum (USER/ADMIN)</td><td>Access control — guards admin panel routes</td></tr>
+    <tr><td>emailVerified</td><td>DateTime?</td><td>Set when email is confirmed</td></tr>
+    <tr><td>image</td><td>String?</td><td>Avatar URL from OAuth provider</td></tr>
+  </tbody>
+</table>
+
+<h4>Subscription Model</h4>
+<p>1:1 with User. Tracks Stripe subscription state and usage limits per billing period.</p>
+<table>
+  <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>stripeCustomerId</td><td>String (unique)</td><td>Links to Stripe customer object</td></tr>
+    <tr><td>stripeSubscriptionId</td><td>String? (unique)</td><td>Active subscription ID (null = free tier)</td></tr>
+    <tr><td>plan</td><td>Enum (FREE/PRO/ENTERPRISE)</td><td>Current subscription tier</td></tr>
+    <tr><td>status</td><td>String</td><td>active, past_due, canceled, trialing</td></tr>
+    <tr><td>currentPeriodEnd</td><td>DateTime?</td><td>When current billing period expires</td></tr>
+    <tr><td>queriesUsed</td><td>Int</td><td>AI queries consumed this period</td></tr>
+    <tr><td>queriesLimit</td><td>Int</td><td>Max queries allowed (10/500/unlimited by tier)</td></tr>
+  </tbody>
+</table>
+
+<h4>Dataset Model</h4>
+<p>Stores metadata about uploaded files. Actual file content is stored in Vercel Blob.</p>
+<table>
+  <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>name</td><td>String</td><td>User-facing name (editable)</td></tr>
+    <tr><td>fileName</td><td>String</td><td>Original file name on upload</td></tr>
+    <tr><td>fileUrl</td><td>String</td><td>Vercel Blob URL for the stored file</td></tr>
+    <tr><td>format</td><td>String</td><td>csv, xlsx, or json</td></tr>
+    <tr><td>rowCount</td><td>Int</td><td>Number of data rows (for display + limits)</td></tr>
+    <tr><td>columns</td><td>Json</td><td>Schema: column names, inferred types, sample values</td></tr>
+  </tbody>
+</table>
+
+<h4>Report Model</h4>
+<p>Stores AI-generated analysis results including chart configurations and insights.</p>
+<table>
+  <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>title</td><td>String</td><td>Auto-generated or user-set report title</td></tr>
+    <tr><td>content</td><td>Json</td><td>Structured analysis: insights[], charts[], summary</td></tr>
+    <tr><td>datasetId</td><td>String (FK)</td><td>The dataset this report was generated from</td></tr>
+    <tr><td>userId</td><td>String (FK)</td><td>Owner of the report</td></tr>
+  </tbody>
+</table>
+
+<h4>AuditLog Model</h4>
+<p>Immutable log of significant user and system actions for compliance and debugging.</p>
+<table>
+  <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>action</td><td>String</td><td>e.g., "dataset.upload", "ai.query", "subscription.upgrade"</td></tr>
+    <tr><td>details</td><td>Json?</td><td>Action-specific metadata (file size, query text, etc.)</td></tr>
+    <tr><td>userId</td><td>String? (FK)</td><td>Who performed the action (null for system events)</td></tr>
+    <tr><td>ipAddress</td><td>String?</td><td>Request origin IP</td></tr>
+  </tbody>
+</table>
+
+<!-- ==================== PHASE 1 ==================== -->
+<div class="page-break"></div>
+<div class="phase-header">
+  <h2>Phase 1: Project Foundation</h2>
+  <div class="desc">~15 files &middot; Project setup, dependencies, database, middleware</div>
+</div>
+
+<h3>1.1 Project Initialization</h3>
+<p>Create the Next.js 15 project with TypeScript, Tailwind CSS, and App Router enabled:</p>
+<pre><code>npx create-next-app@latest ai-analytics --typescript --tailwind --eslint --app --src-dir</code></pre>
+
+<h3>1.2 Dependency Installation</h3>
+<p>The project requires several key packages, each serving a specific purpose:</p>
+
+<table>
+  <thead><tr><th>Package</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>prisma</code> + <code>@prisma/client</code></td><td>Database ORM — schema definition, migrations, type-safe queries</td></tr>
+    <tr><td><code>@auth/prisma-adapter</code></td><td>Connects Auth.js to Prisma for user/account/session storage</td></tr>
+    <tr><td><code>next-auth@beta</code></td><td>Auth.js v5 — authentication framework for Next.js</td></tr>
+    <tr><td><code>stripe</code></td><td>Stripe Node.js SDK for server-side payment operations</td></tr>
+    <tr><td><code>@anthropic-ai/sdk</code></td><td>Official Claude API SDK for AI analysis features</td></tr>
+    <tr><td><code>recharts</code></td><td>React charting library for data visualizations</td></tr>
+    <tr><td><code>posthog-js</code></td><td>PostHog client for product analytics and session replay</td></tr>
+    <tr><td><code>papaparse</code></td><td>CSV parsing — handles large files with streaming</td></tr>
+    <tr><td><code>xlsx</code></td><td>Excel file parsing (.xlsx, .xls formats)</td></tr>
+    <tr><td><code>react-dropzone</code></td><td>Drag-and-drop file upload component</td></tr>
+    <tr><td><code>bcryptjs</code></td><td>Password hashing for credential-based auth</td></tr>
+    <tr><td><code>zod</code></td><td>Schema validation for API inputs and form data</td></tr>
+  </tbody>
+</table>
+
+<h3>1.3 shadcn/ui Setup</h3>
+<p>
+  shadcn/ui is <strong>not a package dependency</strong> — it's a CLI that copies component source code into your
+  project. This gives full control over styling and behavior. Components to install:
+</p>
+<p>
+  <code>button</code>, <code>card</code>, <code>input</code>, <code>label</code>, <code>dialog</code>,
+  <code>table</code>, <code>dropdown-menu</code>, <code>avatar</code>, <code>badge</code>, <code>tabs</code>,
+  <code>toast</code>, <code>separator</code>, <code>sheet</code>, <code>select</code>, <code>textarea</code>,
+  <code>skeleton</code>, <code>progress</code>
+</p>
+
+<h3>1.4 Prisma Schema</h3>
+<p>
+  The Prisma schema defines the database structure. After writing it, <code>npx prisma generate</code> creates
+  TypeScript types, and <code>npx prisma db push</code> syncs the schema to the database.
+</p>
+<div class="box box-green">
+  <div class="box-title">Prisma Workflow</div>
+  <p><code>schema.prisma</code> &rarr; <code>prisma generate</code> (types) &rarr; <code>prisma db push</code> (sync DB) &rarr; <code>prisma studio</code> (visual browser)</p>
+</div>
+
+<h3>1.5 Prisma Client Singleton</h3>
+<p>
+  In development, Next.js hot-reloads create new Prisma instances on each reload, exhausting database connections.
+  The singleton pattern stores the client on <code>globalThis</code> to reuse across reloads:
+</p>
+<pre><code>// src/lib/prisma.ts
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
+export const prisma = globalForPrisma.prisma || new PrismaClient()
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma</code></pre>
+
+<h3>1.6 Middleware</h3>
+<p>
+  Next.js middleware runs <strong>before every request</strong> at the edge. It handles:
+</p>
+<ul>
+  <li><strong>Auth protection</strong>: Redirects unauthenticated users from <code>/dashboard/*</code>, <code>/analyze/*</code>, etc. to <code>/login</code></li>
+  <li><strong>Admin guard</strong>: Checks JWT role claim for <code>/admin/*</code> routes</li>
+  <li><strong>Public routes</strong>: Allows unrestricted access to <code>/</code>, <code>/pricing</code>, <code>/login</code>, <code>/signup</code>, <code>/api/stripe/webhook</code></li>
+</ul>
+
+<h3>1.7 Environment Variables</h3>
+<p>The <code>.env.example</code> file documents all required environment variables:</p>
+<pre><code># Database
+DATABASE_URL="postgresql://..."
+
+# Auth
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+
+# Stripe
+STRIPE_SECRET_KEY=""
+STRIPE_WEBHOOK_SECRET=""
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=""
+STRIPE_PRO_PRICE_ID=""
+STRIPE_ENTERPRISE_PRICE_ID=""
+
+# AI
+ANTHROPIC_API_KEY=""
+
+# Analytics
+NEXT_PUBLIC_GTM_ID=""
+NEXT_PUBLIC_POSTHOG_KEY=""
+NEXT_PUBLIC_POSTHOG_HOST="https://us.i.posthog.com"
+
+# Storage
+BLOB_READ_WRITE_TOKEN=""</code></pre>
+
+<!-- ==================== PHASE 2 ==================== -->
+<div class="page-break"></div>
+<div class="phase-header">
+  <h2>Phase 2: Authentication System</h2>
+  <div class="desc">~8 files &middot; Auth.js v5, login, signup, password reset, user menu</div>
+</div>
+
+<h3>2.1 Auth.js v5 Configuration</h3>
+<p>
+  Auth.js v5 (the successor to NextAuth.js) is configured in <code>src/lib/auth.ts</code>. It exports the
+  <code>auth</code> function (for server-side session checks), <code>handlers</code> (for API routes), and
+  <code>signIn</code>/<code>signOut</code> functions.
+</p>
+
+<h4>Authentication Providers</h4>
+<table>
+  <thead><tr><th>Provider</th><th>Use Case</th><th>How It Works</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>Google OAuth</strong></td>
+      <td>One-click social login</td>
+      <td>User clicks "Continue with Google" &rarr; OAuth flow &rarr; Account record created &rarr; JWT issued</td>
+    </tr>
+    <tr>
+      <td><strong>Credentials</strong></td>
+      <td>Email + password login</td>
+      <td>User submits form &rarr; bcrypt compare against stored hash &rarr; JWT issued on match</td>
+    </tr>
+    <tr>
+      <td><strong>Email (Magic Link)</strong></td>
+      <td>Passwordless login</td>
+      <td>User enters email &rarr; verification link sent &rarr; click link &rarr; auto-login with JWT</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="box box-amber">
+  <div class="box-title">JWT vs Database Sessions</div>
+  <p>
+    We use <strong>JWT strategy</strong> instead of database sessions because:
+    (1) Serverless functions are stateless — JWT carries all session data in the cookie,
+    (2) No database round-trip on every request,
+    (3) Edge middleware can read JWTs without a database connection.
+    Trade-off: JWTs can't be individually revoked (only by changing the secret, which revokes all).
+  </p>
+</div>
+
+<h3>2.2 Auth Callbacks</h3>
+<p>Auth.js callbacks customize the JWT and session data flow:</p>
+<ul>
+  <li><strong>jwt callback</strong>: Adds <code>user.id</code> and <code>user.role</code> to the JWT token on sign-in</li>
+  <li><strong>session callback</strong>: Exposes <code>token.sub</code> (user ID) and <code>token.role</code> on the client-side session object</li>
+</ul>
+<p>This means any component calling <code>useSession()</code> or <code>auth()</code> gets the user's role, enabling admin checks without a database query.</p>
+
+<h3>2.3 Login Page</h3>
+<p>Features: Google OAuth button, email/password form with Zod validation, "Forgot password?" link, "Don't have an account?" link to signup. Uses shadcn/ui Card component for the form container.</p>
+
+<h3>2.4 Signup Page</h3>
+<p>Features: Name, email, password fields with real-time Zod validation (minimum 8 chars, email format). On submit, password is bcrypt-hashed and stored. User automatically gets FREE subscription tier.</p>
+
+<h3>2.5 Forgot Password Page</h3>
+<p>Sends a magic link to the user's email for password reset. In production, integrates with Resend or SendGrid for email delivery.</p>
+
+<h3>2.6 UserMenu Component</h3>
+<p>Dropdown menu in the app topbar showing: user avatar/initials, name, email, links to Settings and Billing, and Sign Out action. Uses shadcn/ui DropdownMenu.</p>
+
+<!-- ==================== PHASE 3 ==================== -->
+<div class="page-break"></div>
+<div class="phase-header">
+  <h2>Phase 3: Marketing Site</h2>
+  <div class="desc">~10 files &middot; Landing page, pricing, responsive layout, dark mode</div>
+</div>
+
+<h3>3.1 Landing Page Structure</h3>
+<p>The landing page is the primary conversion funnel. It follows a proven SaaS layout pattern:</p>
+
+<ol>
+  <li><strong>Hero Section</strong> — Bold headline, supporting subtext, primary CTA button, optional product screenshot/mockup</li>
+  <li><strong>Social Proof Bar</strong> — "Trusted by 1000+ analysts" or logo strip of companies</li>
+  <li><strong>Features Grid</strong> — 6 feature cards with icons, titles, and descriptions</li>
+  <li><strong>How It Works</strong> — 3-step visual flow: Upload &rarr; Analyze &rarr; Report</li>
+  <li><strong>Testimonials</strong> — 3 customer quotes with names and roles</li>
+  <li><strong>CTA Section</strong> — Final call-to-action before footer</li>
+</ol>
+
+<h3>3.2 Feature Cards</h3>
+<table>
+  <thead><tr><th>Feature</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>AI-Powered Analysis</td><td>Ask questions about your data in plain English. Get insights, patterns, and anomalies instantly.</td></tr>
+    <tr><td>Smart Visualizations</td><td>AI recommends the best chart types. Interactive graphs that tell your data's story.</td></tr>
+    <tr><td>Multi-Format Upload</td><td>Drop CSV, Excel, or JSON files. Auto-detection of schemas, types, and structure.</td></tr>
+    <tr><td>Natural Language Queries</td><td>No SQL required. Ask "What's the trend in Q4 sales?" and get an answer.</td></tr>
+    <tr><td>Report Generation</td><td>Compile analyses into shareable reports. Export as PDF or share via link.</td></tr>
+    <tr><td>Enterprise Security</td><td>SOC2 ready. Data encryption at rest and in transit. RBAC and audit logging.</td></tr>
+  </tbody>
+</table>
+
+<h3>3.3 Pricing Page</h3>
+<p>Three-tier pricing with feature comparison. Each tier has a Stripe checkout button that creates a checkout session and redirects the user.</p>
+
+<h3>3.4 Marketing Layout</h3>
+<p>Shared across all marketing pages:</p>
+<ul>
+  <li><strong>Navbar</strong>: Logo, nav links (Features, Pricing), Login button, "Get Started" CTA, mobile hamburger menu</li>
+  <li><strong>Footer</strong>: Logo, product links, legal links (Privacy, Terms), social links, copyright</li>
+  <li><strong>Theme Toggle</strong>: Light/dark mode switch using next-themes</li>
+</ul>
+
+<div class="box box-blue">
+  <div class="box-title">SEO Strategy</div>
+  <p>
+    Marketing pages use Next.js <code>generateMetadata()</code> for per-page SEO.
+    Each page gets: unique title, description, Open Graph image, Twitter card, canonical URL.
+    The landing page targets keywords like "AI data analytics", "analyze CSV with AI",
+    "natural language data analysis". Pricing page targets "data analytics pricing".
+  </p>
+</div>
+
+<!-- ==================== PHASE 4 ==================== -->
+<div class="page-break"></div>
+<div class="phase-header">
+  <h2>Phase 4: Application Dashboard</h2>
+  <div class="desc">~12 files &middot; Sidebar layout, dashboard, datasets, AI workspace, reports, settings, billing</div>
+</div>
+
+<h3>4.1 App Layout (Sidebar + Topbar)</h3>
+<p>The app shell provides consistent navigation for all protected pages:</p>
+<ul>
+  <li><strong>Sidebar</strong> (left, 256px): Logo, nav links (Dashboard, Datasets, Analyze, Reports), bottom section (Settings, Billing, Sign Out). Collapsible on mobile using shadcn Sheet.</li>
+  <li><strong>Topbar</strong> (top): Page title, search input, notification bell, UserMenu dropdown</li>
+  <li><strong>Main Content</strong>: Right of sidebar, below topbar. Scrollable container with max-width constraint.</li>
+</ul>
+
+<h3>4.2 Dashboard Page</h3>
+<p>The first thing users see after login. Provides an at-a-glance overview:</p>
+<div class="feature-grid">
+  <div class="feature-card">
+    <h4>Stats Cards</h4>
+    <p>4 metric cards: Total Datasets, AI Queries Used, Reports Generated, Storage Used.
+    Each shows current value and usage bar (vs. plan limit).</p>
+  </div>
+  <div class="feature-card">
+    <h4>Recent Activity</h4>
+    <p>Chronological list of recent actions: uploads, queries, report generations.
+    Shows action type icon, description, and timestamp.</p>
+  </div>
+  <div class="feature-card">
+    <h4>Quick Actions</h4>
+    <p>Large action cards: "Upload Dataset", "Start Analysis", "View Reports".
+    Reduce clicks to reach key workflows.</p>
+  </div>
+  <div class="feature-card">
+    <h4>Usage Chart</h4>
+    <p>Recharts area chart showing AI query usage over the current billing period.
+    Helps users understand their consumption pattern.</p>
+  </div>
+</div>
+
+<h3>4.3 Datasets Page</h3>
+<p>Central hub for data management. Two main areas:</p>
+<ul>
+  <li><strong>Upload Section</strong>: react-dropzone powered drag-and-drop area. Accepts CSV, XLSX, JSON. Shows upload progress, validates file size against plan limits, parses file on upload to detect schema.</li>
+  <li><strong>Dataset Table</strong>: Lists all user datasets with columns: Name, Format, Rows, Size, Created Date, Actions (Analyze, Preview, Delete). Sortable and paginated.</li>
+</ul>
+<p>Clicking a dataset opens a <strong>Preview Modal</strong> showing the first 100 rows in a data table with column type badges.</p>
+
+<h3>4.4 Analyze Page (AI Workspace)</h3>
+<p>The core product experience — a chat-style interface for data analysis:</p>
+<ol>
+  <li><strong>Dataset Selector</strong>: Dropdown to choose which dataset to analyze</li>
+  <li><strong>Chat Interface</strong>: User types natural language queries (e.g., "What are the top 5 products by revenue?")</li>
+  <li><strong>AI Response Area</strong>: Claude's response renders with:
+    <ul>
+      <li>Text insights (markdown formatted)</li>
+      <li>Auto-generated charts (Recharts, configured by AI)</li>
+      <li>Data tables (for tabular results)</li>
+      <li>"Save to Report" button on each response</li>
+    </ul>
+  </li>
+  <li><strong>Conversation History</strong>: Full chat history preserved during session, enabling follow-up questions</li>
+</ol>
+
+<div class="box box-green">
+  <div class="box-title">How AI Analysis Works</div>
+  <p>
+    User query + dataset (first 500 rows + full schema) are sent to Claude API. The prompt instructs Claude
+    to return structured JSON with: <code>insights[]</code> (text findings), <code>charts[]</code> (Recharts-compatible
+    config objects), and <code>summary</code> (one-paragraph overview). The frontend parses this JSON and renders
+    each section with appropriate components.
+  </p>
+</div>
+
+<h3>4.5 Reports Page</h3>
+<p>Gallery view of all generated reports. Each report card shows: title, source dataset, creation date,
+number of charts/insights. Click to view full report. Export as PDF button. Delete action.</p>
+
+<h3>4.6 Settings Page</h3>
+<p>User profile management: edit name, change password, notification preferences, theme selection,
+API key display (for future API access). Uses form with Zod validation and optimistic UI updates.</p>
+
+<h3>4.7 Billing Page</h3>
+<p>Subscription management powered by Stripe:</p>
+<ul>
+  <li>Current plan display with feature limits</li>
+  <li>Usage meters (queries, datasets, storage)</li>
+  <li>"Manage Subscription" button &rarr; Stripe Customer Portal (upgrade, downgrade, cancel, update payment)</li>
+  <li>Invoice history table with download links</li>
+</ul>
+
+<!-- ==================== PHASE 5 ==================== -->
+<div class="page-break"></div>
+<div class="phase-header">
+  <h2>Phase 5: API Routes</h2>
+  <div class="desc">~10 files &middot; Stripe, AI, datasets, admin endpoints</div>
+</div>
+
+<h3>5.1 API Route Architecture</h3>
+<p>All API routes are Next.js Route Handlers (serverless functions). They follow a consistent pattern:</p>
+<pre><code>export async function POST(request: Request) {
+  // 1. Authenticate — get session from Auth.js
+  const session = await auth()
+  if (!session) return Response.json({ error: 'Unauthorized' }, { status: 401 })
+
+  // 2. Validate — parse request body with Zod
+  const body = schema.parse(await request.json())
+
+  // 3. Authorize — check subscription limits
+  // 4. Execute — perform business logic
+  // 5. Audit — log the action
+  // 6. Return — JSON response
+}</code></pre>
+
+<h3>5.2 Stripe Routes</h3>
+
+<h4>POST /api/stripe/checkout</h4>
+<p>Creates a Stripe Checkout Session for plan upgrades. Receives <code>priceId</code> in the body.
+Creates a Stripe customer if one doesn't exist, then generates a checkout URL. Returns the URL
+for client-side redirect.</p>
+
+<h4>POST /api/stripe/portal</h4>
+<p>Creates a Stripe Customer Portal session for subscription management. The portal is hosted by
+Stripe and handles: plan changes, payment method updates, invoice viewing, and cancellation.
+Returns the portal URL.</p>
+
+<h4>POST /api/stripe/webhook</h4>
+<p>Receives Stripe webhook events. <strong>Critical: This route must NOT use auth middleware</strong> —
+it's called by Stripe's servers, not by authenticated users. It verifies the webhook signature
+using the webhook secret.</p>
+
+<table>
+  <thead><tr><th>Event</th><th>Action</th></tr></thead>
+  <tbody>
+    <tr><td><code>checkout.session.completed</code></td><td>Create/update Subscription record, set plan to PRO or ENTERPRISE</td></tr>
+    <tr><td><code>customer.subscription.updated</code></td><td>Sync plan and status changes (upgrades, downgrades)</td></tr>
+    <tr><td><code>customer.subscription.deleted</code></td><td>Revert user to FREE plan</td></tr>
+    <tr><td><code>invoice.payment_succeeded</code></td><td>Reset queriesUsed counter for new billing period</td></tr>
+    <tr><td><code>invoice.payment_failed</code></td><td>Set subscription status to "past_due", send notification</td></tr>
+  </tbody>
+</table>
+
+<div class="box box-amber">
+  <div class="box-title">Webhook Idempotency</div>
+  <p>
+    Stripe may send the same webhook event multiple times. The webhook handler should be
+    <strong>idempotent</strong> — processing the same event twice should not create duplicate records
+    or charge users twice. We achieve this by checking if the subscription already matches the
+    event data before updating.
+  </p>
+</div>
+
+<h3>5.3 AI Routes</h3>
+
+<h4>POST /api/ai/analyze</h4>
+<p>Accepts <code>datasetId</code> and <code>prompt</code>. Fetches the dataset from storage, sends to Claude
+with a structured analysis prompt, returns insights + chart configs. Checks subscription query limits
+before processing. Increments <code>queriesUsed</code> on success.</p>
+
+<h4>POST /api/ai/query</h4>
+<p>Natural language query against a dataset. Claude converts the question into data filtering/aggregation
+operations, executes them against the dataset, and returns formatted results. Supports follow-up
+queries with conversation context.</p>
+
+<h3>5.4 Dataset Routes</h3>
+
+<h4>GET /api/datasets</h4>
+<p>Lists all datasets for the authenticated user. Returns id, name, format, rowCount, columns, createdAt.</p>
+
+<h4>POST /api/datasets/upload</h4>
+<p>Handles multipart file upload. Process: receive file &rarr; validate format and size &rarr; upload to
+Vercel Blob &rarr; parse file to detect schema &rarr; create Dataset record with metadata &rarr; return dataset info.</p>
+
+<h4>DELETE /api/datasets/[id]</h4>
+<p>Deletes dataset record and associated file from Vercel Blob. Also cascades to delete related reports.</p>
+
+<h3>5.5 Admin Routes</h3>
+<p>Protected by admin role check. <code>GET /api/admin/users</code> returns paginated user list with
+subscription info. <code>GET /api/admin/stats</code> returns platform metrics: total users, MRR,
+active subscriptions by plan, API usage totals.</p>
+
+<!-- ==================== PHASE 6 ==================== -->
+<div class="page-break"></div>
+<div class="phase-header">
+  <h2>Phase 6: AI Engine</h2>
+  <div class="desc">~3 files &middot; Claude API wrapper, file parser, usage tracking</div>
+</div>
+
+<h3>6.1 Claude API Service (src/lib/ai.ts)</h3>
+<p>Central AI service that wraps all Claude API interactions. Four main functions:</p>
+
+<h4>analyzeDataset(data, prompt)</h4>
+<p>Sends the dataset schema + sample rows + user prompt to Claude. The system prompt instructs Claude to return structured JSON:</p>
+<pre><code>{
+  "insights": [
+    { "title": "Revenue Trend", "description": "Revenue increased 23% QoQ...", "importance": "high" }
+  ],
+  "charts": [
+    {
+      "type": "bar",
+      "title": "Revenue by Quarter",
+      "data": [{ "quarter": "Q1", "revenue": 45000 }, ...],
+      "xKey": "quarter",
+      "yKey": "revenue"
+    }
+  ],
+  "summary": "The dataset shows strong growth with seasonal patterns..."
+}</code></pre>
+<p>This structure maps directly to Recharts components on the frontend.</p>
+
+<h4>generateChartConfig(data, prompt)</h4>
+<p>AI recommends the optimal visualization for given data. Returns chart type (bar, line, pie, scatter, area),
+axis mappings, color scheme, and aggregation method.</p>
+
+<h4>queryData(data, query)</h4>
+<p>Converts natural language to data operations. Claude analyzes the schema, determines the right
+filter/group/aggregate operations, and returns results. Example: "Show me average salary by department"
+&rarr; groups by department column, averages salary column.</p>
+
+<h4>generateReport(data, analyses)</h4>
+<p>Takes multiple previous analysis results and compiles them into a cohesive report structure
+with executive summary, key findings, detailed charts, and recommendations.</p>
+
+<div class="box box-purple">
+  <div class="box-title">Prompt Engineering Strategy</div>
+  <p>
+    All prompts use Claude's system prompt for role definition ("You are a data analyst..."),
+    include the full dataset schema in the user message, and use structured output formatting
+    instructions. The system prompt specifies the exact JSON structure expected, and Claude's
+    instruction-following capability ensures consistent, parseable responses.
+  </p>
+</div>
+
+<h3>6.2 File Parser (src/lib/upload.ts)</h3>
+<p>Handles parsing of uploaded files into a standardized internal format:</p>
+
+<table>
+  <thead><tr><th>Format</th><th>Parser</th><th>Features</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>CSV</td>
+      <td>papaparse</td>
+      <td>Auto-detects delimiter, handles quoted fields, streaming for large files, header row detection</td>
+    </tr>
+    <tr>
+      <td>Excel (.xlsx)</td>
+      <td>xlsx (SheetJS)</td>
+      <td>Multi-sheet support (uses first sheet), date format detection, formula evaluation</td>
+    </tr>
+    <tr>
+      <td>JSON</td>
+      <td>Native JSON.parse</td>
+      <td>Supports array of objects and nested structures, auto-flattens one level deep</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>After parsing, the system performs <strong>schema detection</strong>:</p>
+<ul>
+  <li>Column name extraction from headers</li>
+  <li>Type inference: string, number, date, boolean (samples first 100 rows)</li>
+  <li>Null/missing value counting per column</li>
+  <li>Preview generation (first 100 rows for quick display)</li>
+</ul>
+
+<h3>6.3 Usage Tracking &amp; Rate Limiting</h3>
+<p>Each subscription tier has defined limits. Before any AI operation:</p>
+<ol>
+  <li>Fetch user's Subscription record</li>
+  <li>Check <code>queriesUsed &lt; queriesLimit</code></li>
+  <li>If limit reached, return 429 with upgrade prompt</li>
+  <li>On success, increment <code>queriesUsed</code> atomically</li>
+  <li>Log to AuditLog for tracking</li>
+</ol>
+
+<!-- ==================== PHASE 7 ==================== -->
+<div class="page-break"></div>
+<div class="phase-header">
+  <h2>Phase 7: Analytics &amp; Marketing Pixels</h2>
+  <div class="desc">~6 files &middot; GTM, PostHog, unified events, conversion tracking</div>
+</div>
+
+<h3>7.1 Analytics Architecture</h3>
+<p>The analytics system uses a dual-track approach: GTM for marketing attribution and PostHog for product analytics.</p>
+
+<div class="flow">User Action
+    |
+    v
+track('event', data)
+    |
+    +---> GTM dataLayer.push()       +---> posthog.capture()
+    |         |                       |
+    |    GTM Console routes to:       PostHog Dashboard:
+    |    ├── GA4 (all events)         ├── Funnels
+    |    ├── Meta Pixel (conversions) ├── Session replay
+    |    ├── LinkedIn (B2B events)    ├── Feature flags
+    |    └── Twitter/X (conversions)  └── A/B testing
+    |
+    v
+Single track() call powers everything</div>
+
+<h3>7.2 GTM Integration</h3>
+<p>Google Tag Manager acts as a <strong>container</strong> for all marketing pixels. Two script tags are added to the root layout:</p>
+<ul>
+  <li><code>&lt;script&gt;</code> in <code>&lt;head&gt;</code>: GTM JavaScript snippet</li>
+  <li><code>&lt;noscript&gt;</code> in <code>&lt;body&gt;</code>: Fallback iframe for users with JS disabled</li>
+</ul>
+<p>All ad platform pixels (GA4, Meta, LinkedIn, Twitter/X) are configured <strong>inside the GTM web console</strong>,
+not in application code. This means adding or removing a pixel requires zero code changes and zero deployments.</p>
+
+<h3>7.3 PostHog Integration</h3>
+<p>PostHog client initializes in a React context provider wrapping the entire app. It provides:</p>
+<ul>
+  <li><strong>Auto-capture</strong>: Automatically tracks clicks, page views, and form submissions</li>
+  <li><strong>Session replay</strong>: Records user sessions for UX debugging (configurable sampling rate)</li>
+  <li><strong>Feature flags</strong>: Server-side and client-side feature flag evaluation</li>
+  <li><strong>A/B testing</strong>: Built on feature flags, integrates with analytics for experiment analysis</li>
+  <li><strong>Custom events</strong>: Via <code>posthog.capture()</code> for product-specific tracking</li>
+</ul>
+
+<h3>7.4 Unified Event System</h3>
+<p>A single <code>track()</code> function dispatches events to both GTM and PostHog simultaneously:</p>
+
+<pre><code>// src/lib/analytics/events.ts
+export function track(event: string, properties?: Record&lt;string, any&gt;) {
+  // GTM
+  window.dataLayer?.push({ event, ...properties })
+  // PostHog
+  posthog?.capture(event, properties)
+}</code></pre>
+
+<h4>Key Events Tracked</h4>
+<table>
+  <thead><tr><th>Event</th><th>When</th><th>Properties</th></tr></thead>
+  <tbody>
+    <tr><td><code>signup_completed</code></td><td>User creates account</td><td>method (google/email)</td></tr>
+    <tr><td><code>dataset_uploaded</code></td><td>File upload succeeds</td><td>format, rowCount, fileSize</td></tr>
+    <tr><td><code>ai_query_sent</code></td><td>User sends analysis query</td><td>datasetId, promptLength</td></tr>
+    <tr><td><code>report_generated</code></td><td>Report saved</td><td>chartCount, insightCount</td></tr>
+    <tr><td><code>checkout_started</code></td><td>User clicks upgrade</td><td>plan, price</td></tr>
+    <tr><td><code>plan_upgraded</code></td><td>Stripe confirms payment</td><td>fromPlan, toPlan, value</td></tr>
+    <tr><td><code>page_view</code></td><td>Route change</td><td>path, referrer</td></tr>
+  </tbody>
+</table>
+
+<h3>7.5 GTM Container Setup Guide</h3>
+<p>After deploying the application, configure these tags in the GTM web console:</p>
+<ol>
+  <li><strong>GA4 Configuration Tag</strong>: Trigger on All Pages, measurement ID from GA4 property</li>
+  <li><strong>GA4 Event Tag</strong>: Trigger on custom events, forward event name and properties</li>
+  <li><strong>Meta Pixel</strong>: Base code tag (All Pages) + conversion event tags (signup, purchase)</li>
+  <li><strong>LinkedIn Insight Tag</strong>: Partner ID tag (All Pages) + conversion tags</li>
+  <li><strong>Twitter/X Universal Website Tag</strong>: Pixel ID (All Pages) + conversion events</li>
+</ol>
+
+<!-- ==================== PHASE 8 ==================== -->
+<div class="page-break"></div>
+<div class="phase-header">
+  <h2>Phase 8: Admin Panel</h2>
+  <div class="desc">~4 files &middot; Admin dashboard, user management, access control</div>
+</div>
+
+<h3>8.1 Admin Access Control</h3>
+<p>Admin routes are protected at two levels:</p>
+<ol>
+  <li><strong>Middleware level</strong>: The Next.js middleware checks the JWT <code>role</code> claim.
+  Requests to <code>/admin/*</code> from non-admin users receive a 403 redirect.</li>
+  <li><strong>API level</strong>: Admin API routes (<code>/api/admin/*</code>) independently verify
+  the session role, providing defense in depth.</li>
+</ol>
+
+<h3>8.2 Admin Dashboard</h3>
+<p>Displays platform-wide metrics for business operations:</p>
+<ul>
+  <li><strong>Key Metrics</strong>: Total users, MRR (Monthly Recurring Revenue), active subscriptions count, total AI queries processed</li>
+  <li><strong>Subscription Distribution</strong>: Pie chart showing Free vs Pro vs Enterprise users</li>
+  <li><strong>Revenue Chart</strong>: Line chart showing MRR growth over time</li>
+  <li><strong>Recent Signups</strong>: Table of newest users with signup date and method</li>
+  <li><strong>API Usage</strong>: Bar chart of daily AI query volume</li>
+</ul>
+
+<h3>8.3 User Management</h3>
+<p>Comprehensive user administration interface:</p>
+<ul>
+  <li><strong>User Table</strong>: Searchable, paginated list with columns: Name, Email, Role, Plan, Status, Created, Actions</li>
+  <li><strong>Search</strong>: Filter by name, email, plan, or role</li>
+  <li><strong>Actions</strong>: View user details, change role (USER/ADMIN), disable account, view usage history</li>
+  <li><strong>User Detail Panel</strong>: Slide-over panel showing: subscription details, dataset list, query history, audit log entries</li>
+</ul>
+
+<!-- ==================== PHASE 9 ==================== -->
+<div class="page-break"></div>
+<div class="phase-header">
+  <h2>Phase 9: Polish &amp; Deployment</h2>
+  <div class="desc">~5 files &middot; Loading states, error handling, SEO, deployment</div>
+</div>
+
+<h3>9.1 Loading States</h3>
+<p>Every page and data-fetching component gets appropriate loading UX:</p>
+<ul>
+  <li><strong>Page-level</strong>: Next.js <code>loading.tsx</code> files show skeleton screens during route transitions</li>
+  <li><strong>Component-level</strong>: shadcn Skeleton components for cards, tables, and charts during data fetch</li>
+  <li><strong>Action-level</strong>: Button loading spinners during form submissions and API calls</li>
+</ul>
+
+<h3>9.2 Error Handling</h3>
+<ul>
+  <li><strong>Error Boundaries</strong>: Next.js <code>error.tsx</code> files catch rendering errors per route segment</li>
+  <li><strong>API Error Responses</strong>: Consistent JSON error format with status codes and user-friendly messages</li>
+  <li><strong>Toast Notifications</strong>: shadcn Toast for success/error feedback on user actions</li>
+  <li><strong>Not Found</strong>: Custom <code>not-found.tsx</code> page with helpful navigation</li>
+</ul>
+
+<h3>9.3 SEO Optimization</h3>
+<p>Marketing pages are optimized for search engines:</p>
+<ul>
+  <li><strong>Metadata</strong>: Per-page title, description via Next.js <code>generateMetadata()</code></li>
+  <li><strong>Open Graph</strong>: OG image, title, description for social sharing (Facebook, LinkedIn)</li>
+  <li><strong>Twitter Cards</strong>: Large image summary cards for Twitter/X sharing</li>
+  <li><strong>Structured Data</strong>: JSON-LD for SoftwareApplication schema (helps Google understand the product)</li>
+  <li><strong>Sitemap</strong>: Auto-generated via Next.js <code>sitemap.ts</code></li>
+  <li><strong>Robots.txt</strong>: Allow marketing pages, disallow app/admin routes</li>
+</ul>
+
+<h3>9.4 Deployment to Vercel</h3>
+<ol>
+  <li>Connect GitHub repository to Vercel</li>
+  <li>Configure environment variables in Vercel dashboard</li>
+  <li>Set up Neon database and run migrations</li>
+  <li>Configure Stripe webhook endpoint to point to production URL</li>
+  <li>Set up GTM container with production pixel IDs</li>
+  <li>Deploy via <code>git push</code> — Vercel auto-builds and deploys</li>
+</ol>
+
+<!-- ==================== PRICING ==================== -->
+<div class="page-break"></div>
+<h2>14. Pricing &amp; Business Model</h2>
+
+<table>
+  <thead>
+    <tr><th>Feature</th><th>Free</th><th>Pro ($29/mo)</th><th>Enterprise ($99/mo)</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Datasets</td><td>3</td><td>50</td><td>Unlimited</td></tr>
+    <tr><td>AI Queries / Month</td><td>10</td><td>500</td><td>Unlimited</td></tr>
+    <tr><td>Max File Size</td><td>5 MB</td><td>50 MB</td><td>500 MB</td></tr>
+    <tr><td>Reports</td><td>5</td><td>Unlimited</td><td>Unlimited</td></tr>
+    <tr><td>Export Formats</td><td>CSV</td><td>CSV, PDF</td><td>CSV, PDF, API</td></tr>
+    <tr><td>Support</td><td>Community</td><td>Email</td><td>Priority</td></tr>
+    <tr><td>API Access</td><td>No</td><td>No</td><td>Yes</td></tr>
+    <tr><td>Team Members</td><td>1</td><td>1</td><td>5</td></tr>
+    <tr><td>Custom Branding</td><td>No</td><td>No</td><td>Yes</td></tr>
+  </tbody>
+</table>
+
+<div class="box box-green">
+  <div class="box-title">Revenue Model</div>
+  <p>
+    The Free tier drives user acquisition (try before you buy). Pro ($29/mo) is the primary revenue driver,
+    targeting individual analysts. Enterprise ($99/mo) targets teams with higher limits and API access.
+    At 100 paying users (70 Pro + 30 Enterprise), MRR = $5,000. At 1,000 paying users, MRR = $40,000+.
+  </p>
+</div>
+
+<!-- ==================== DATA FLOW ==================== -->
+<h2>15. Data Flow Architecture</h2>
+
+<h3>File Upload Flow</h3>
+<div class="flow">User drops file
+    |
+    v
+Frontend: validate format + size against plan limits
+    |
+    v
+POST /api/datasets/upload (multipart FormData)
+    |
+    v
+Server: parse file (papaparse/xlsx/JSON.parse)
+    |
+    v
+Detect schema: columns, types, row count
+    |
+    v
+Upload raw file to Vercel Blob --> fileUrl
+    |
+    v
+Create Dataset record in Prisma (metadata + fileUrl)
+    |
+    v
+Return dataset info to frontend
+    |
+    v
+Frontend: show in dataset table + success toast</div>
+
+<h3>AI Analysis Flow</h3>
+<div class="flow">User types question in chat
+    |
+    v
+POST /api/ai/analyze { datasetId, prompt }
+    |
+    v
+Server: auth check --> subscription limit check
+    |
+    v
+Fetch dataset from Vercel Blob
+    |
+    v
+Parse dataset, prepare context (schema + sample rows)
+    |
+    v
+Send to Claude API with structured output prompt
+    |
+    v
+Claude returns JSON: { insights[], charts[], summary }
+    |
+    v
+Increment queriesUsed, log to AuditLog
+    |
+    v
+Return structured response to frontend
+    |
+    v
+Frontend: render insights as text, charts via Recharts,
+          summary as markdown, "Save to Report" button</div>
+
+<h3>Billing Flow</h3>
+<div class="flow">User clicks "Upgrade to Pro"
+    |
+    v
+POST /api/stripe/checkout { priceId }
+    |
+    v
+Create Stripe Checkout Session (or Customer if needed)
+    |
+    v
+Redirect user to Stripe-hosted checkout page
+    |
+    v
+User completes payment on Stripe
+    |
+    v
+Stripe sends webhook: checkout.session.completed
+    |
+    v
+POST /api/stripe/webhook (signature verified)
+    |
+    v
+Update Subscription: plan=PRO, limits=500 queries
+    |
+    v
+User returns to /billing, sees updated plan</div>
+
+<!-- ==================== SECURITY ==================== -->
+<div class="page-break"></div>
+<h2>16. Security Considerations</h2>
+
+<table>
+  <thead><tr><th>Threat</th><th>Mitigation</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Unauthorized access</td>
+      <td>Edge middleware auth check on all protected routes; JWT verification on API routes</td>
+    </tr>
+    <tr>
+      <td>Privilege escalation</td>
+      <td>Role check at middleware + API level (defense in depth); role stored in JWT, verified server-side</td>
+    </tr>
+    <tr>
+      <td>Data leakage</td>
+      <td>All dataset queries filter by userId — users can only access their own data</td>
+    </tr>
+    <tr>
+      <td>File upload attacks</td>
+      <td>Allowlist of file extensions (csv, xlsx, json); file size limits per plan; content-type validation</td>
+    </tr>
+    <tr>
+      <td>Stripe webhook forgery</td>
+      <td>Verify webhook signature using STRIPE_WEBHOOK_SECRET before processing</td>
+    </tr>
+    <tr>
+      <td>AI prompt injection</td>
+      <td>Dataset content is treated as data (user message), not instructions (system prompt); output is JSON-parsed, not executed</td>
+    </tr>
+    <tr>
+      <td>XSS</td>
+      <td>React's default escaping; AI output rendered as markdown (sanitized), not raw HTML</td>
+    </tr>
+    <tr>
+      <td>CSRF</td>
+      <td>Auth.js built-in CSRF token validation on all auth actions</td>
+    </tr>
+    <tr>
+      <td>SQL injection</td>
+      <td>Prisma ORM uses parameterized queries — no raw SQL</td>
+    </tr>
+    <tr>
+      <td>Brute force</td>
+      <td>Rate limiting on auth endpoints; account lockout after repeated failures</td>
+    </tr>
+    <tr>
+      <td>Data at rest</td>
+      <td>Neon encrypts data at rest (AES-256); passwords bcrypt-hashed with salt</td>
+    </tr>
+    <tr>
+      <td>Data in transit</td>
+      <td>HTTPS enforced by Vercel; all API calls use TLS</td></tr>
+  </tbody>
+</table>
+
+<!-- ==================== TESTING ==================== -->
+<h2>17. Verification &amp; Testing Checklist</h2>
+
+<h3>Functional Tests</h3>
+<table>
+  <thead><tr><th>#</th><th>Test</th><th>Expected Result</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Visit / (landing page)</td><td>Hero, features, testimonials render; CTA buttons link to /signup</td></tr>
+    <tr><td>2</td><td>Visit /pricing</td><td>3 pricing tiers display; checkout buttons work for logged-in users</td></tr>
+    <tr><td>3</td><td>Sign up with email</td><td>Account created, redirect to /dashboard, FREE subscription auto-created</td></tr>
+    <tr><td>4</td><td>Sign in with Google</td><td>OAuth flow completes, Account linked, redirect to /dashboard</td></tr>
+    <tr><td>5</td><td>Visit /dashboard without auth</td><td>Redirect to /login</td></tr>
+    <tr><td>6</td><td>Upload CSV file</td><td>File parsed, schema detected, Dataset record created, appears in table</td></tr>
+    <tr><td>7</td><td>Upload file exceeding size limit</td><td>Error message with plan upgrade suggestion</td></tr>
+    <tr><td>8</td><td>Send AI analysis query</td><td>Claude response with insights + charts renders correctly</td></tr>
+    <tr><td>9</td><td>Exceed query limit (Free tier)</td><td>429 response with "Upgrade to Pro" prompt</td></tr>
+    <tr><td>10</td><td>Save analysis to report</td><td>Report created, appears in /reports gallery</td></tr>
+    <tr><td>11</td><td>Click "Upgrade to Pro"</td><td>Stripe checkout page opens, test card works, webhook processes</td></tr>
+    <tr><td>12</td><td>Manage subscription</td><td>Stripe portal opens, can change plan or cancel</td></tr>
+    <tr><td>13</td><td>Admin user visits /admin</td><td>Admin dashboard with platform metrics</td></tr>
+    <tr><td>14</td><td>Non-admin visits /admin</td><td>Redirect to /dashboard (access denied)</td></tr>
+    <tr><td>15</td><td>Toggle dark mode</td><td>All pages switch themes correctly</td></tr>
+    <tr><td>16</td><td>Mobile viewport</td><td>Responsive layout, hamburger menu, touch-friendly</td></tr>
+  </tbody>
+</table>
+
+<h3>Analytics Verification</h3>
+<ol>
+  <li>Open GTM Debug/Preview mode — verify dataLayer pushes on page views and custom events</li>
+  <li>Check PostHog dashboard — verify events appear with correct properties</li>
+  <li>Open browser DevTools Network tab — verify GA4, Meta Pixel, LinkedIn, Twitter/X requests fire</li>
+  <li>Test conversion events: signup &rarr; verify purchase event in all platforms</li>
+</ol>
+
+<div style="text-align: center; padding: 3rem 0; color: #94a3b8; border-top: 2px solid #e2e8f0; margin-top: 3rem;">
+  <p style="font-size: 14pt; font-weight: 600; color: #6366f1;">End of Plan Document</p>
+  <p style="margin-top: 0.5rem;">AI Data Analytics SaaS &mdash; Complete Build Plan</p>
+  <p>Generated February 18, 2026</p>
+</div>
+
+</body>
+</html>
