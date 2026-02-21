@@ -2,6 +2,7 @@ import { Sidebar } from "@/components/shared/sidebar"
 import { UserMenu } from "@/components/shared/user-menu"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { MobileSidebar } from "@/components/shared/mobile-sidebar"
+import { EmailVerificationBanner } from "@/components/shared/email-banner"
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -16,6 +17,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <UserMenu />
           </div>
         </header>
+        <EmailVerificationBanner />
         <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
       </div>
     </div>

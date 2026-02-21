@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { checkRateLimit, getClientIp, rateLimitResponse } from "@/lib/rate-limit"
 import { z } from "zod"
 
 const updateSchema = z.object({
@@ -9,6 +10,9 @@ const updateSchema = z.object({
 
 export async function PATCH(request: Request) {
   try {
+    const rl = checkRateLimit("general", getClientIp(request))
+    if (!rl.success) return rateLimitResponse(rl.resetAt)
+
     const session = await auth()
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

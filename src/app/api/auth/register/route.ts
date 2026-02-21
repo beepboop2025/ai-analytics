@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { checkRateLimit, getClientIp, rateLimitResponse } from "@/lib/rate-limit"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
 
@@ -11,6 +12,9 @@ const registerSchema = z.object({
 
 export async function POST(request: Request) {
   try {
+    const rl = checkRateLimit("auth", getClientIp(request))
+    if (!rl.success) return rateLimitResponse(rl.resetAt)
+
     const body = await request.json()
     const parsed = registerSchema.safeParse(body)
     if (!parsed.success) {
@@ -47,6 +51,13 @@ export async function POST(request: Request) {
           },
         },
       },
+    })
+
+    // Send verification email (fire-and-forget)
+    import("@/lib/email").then(({ generateAndSendVerificationEmail }) => {
+      generateAndSendVerificationEmail(email).catch((err) =>
+        console.error("Failed to send verification email:", err),
+      )
     })
 
     return NextResponse.json(

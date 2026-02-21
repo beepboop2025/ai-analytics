@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { analyzeDataset } from "@/lib/ai"
 import { parseFile, getFileFormat } from "@/lib/upload"
+import { checkRateLimit, getClientIp, rateLimitResponse } from "@/lib/rate-limit"
 import { z } from "zod"
 
 const analyzeSchema = z.object({
@@ -12,6 +13,9 @@ const analyzeSchema = z.object({
 
 export async function POST(request: Request) {
   try {
+    const rl = checkRateLimit("ai", getClientIp(request))
+    if (!rl.success) return rateLimitResponse(rl.resetAt)
+
     const session = await auth()
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

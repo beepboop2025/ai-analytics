@@ -46,10 +46,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.role = (user as { role?: string }).role ?? "USER"
         token.id = user.id
+      }
+      // Refresh emailVerified from DB on every token refresh
+      if (token.id && (trigger === "signIn" || trigger === "update" || !token.emailVerified)) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { emailVerified: true },
+        })
+        token.emailVerified = dbUser?.emailVerified?.toISOString() ?? null
       }
       return token
     },
@@ -57,6 +65,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (session.user) {
         session.user.id = token.id as string
         session.user.role = token.role as string
+        session.user.emailVerified = token.emailVerified ? new Date(token.emailVerified) : null
       }
       return session
     },
