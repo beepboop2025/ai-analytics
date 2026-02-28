@@ -1,4 +1,6 @@
-export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID
+const _raw = process.env.NEXT_PUBLIC_GTM_ID || ""
+// Validate GTM-XXXXXXX format to prevent script injection via env vars
+export const GTM_ID = /^GTM-[A-Z0-9]+$/.test(_raw) ? _raw : undefined
 
 declare global {
   interface Window {

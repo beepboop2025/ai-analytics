@@ -29,18 +29,35 @@ export async function POST(request: Request) {
 
     const { datasetId, prompt } = parsed.data
 
-    // Check subscription limits
+    // Atomically increment usage and check limit to prevent TOCTOU race
     const subscription = await prisma.subscription.findUnique({
       where: { userId: session.user.id },
     })
 
     if (subscription) {
-      const atLimit = subscription.queriesLimit !== -1 && subscription.queriesUsed >= subscription.queriesLimit
-      if (atLimit) {
-        return NextResponse.json(
-          { error: "Query limit reached. Upgrade your plan for more queries." },
-          { status: 429 },
-        )
+      if (subscription.queriesLimit !== -1) {
+        // Atomic: only increment if under the limit
+        const updated = await prisma.subscription.updateMany({
+          where: {
+            userId: session.user.id,
+            OR: [
+              { queriesLimit: -1 },
+              { queriesUsed: { lt: subscription.queriesLimit } },
+            ],
+          },
+          data: { queriesUsed: { increment: 1 } },
+        })
+        if (updated.count === 0) {
+          return NextResponse.json(
+            { error: "Query limit reached. Upgrade your plan for more queries." },
+            { status: 429 },
+          )
+        }
+      } else {
+        await prisma.subscription.update({
+          where: { userId: session.user.id },
+          data: { queriesUsed: { increment: 1 } },
+        })
       }
     }
 
@@ -51,6 +68,16 @@ export async function POST(request: Request) {
 
     if (!dataset) {
       return NextResponse.json({ error: "Dataset not found" }, { status: 404 })
+    }
+
+    // Validate URL points to Vercel Blob to prevent SSRF
+    try {
+      const fileHost = new URL(dataset.fileUrl).hostname
+      if (!fileHost.endsWith(".vercel-storage.com") && !fileHost.endsWith(".public.blob.vercel-storage.com")) {
+        return NextResponse.json({ error: "Invalid file source" }, { status: 400 })
+      }
+    } catch {
+      return NextResponse.json({ error: "Invalid file URL" }, { status: 400 })
     }
 
     // Fetch and parse file content
@@ -68,14 +95,6 @@ export async function POST(request: Request) {
 
     // Send to Claude for analysis
     const analysis = await analyzeDataset(columns, rows.slice(0, 500), prompt, dataset.rowCount)
-
-    // Increment usage
-    if (subscription) {
-      await prisma.subscription.update({
-        where: { userId: session.user.id },
-        data: { queriesUsed: { increment: 1 } },
-      })
-    }
 
     // Audit log
     await prisma.auditLog.create({

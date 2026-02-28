@@ -55,8 +55,15 @@ export function checkRateLimit(category: RateLimitCategory, ip: string) {
 }
 
 export function getClientIp(request: Request): string {
+  // x-real-ip is set by Vercel/reverse proxies and cannot be spoofed by clients
+  const realIp = request.headers.get("x-real-ip")
+  if (realIp) return realIp.trim()
+  // Fallback: use only the rightmost (most trusted) X-Forwarded-For entry
   const forwarded = request.headers.get("x-forwarded-for")
-  if (forwarded) return forwarded.split(",")[0].trim()
+  if (forwarded) {
+    const parts = forwarded.split(",")
+    return parts[parts.length - 1].trim()
+  }
   return "127.0.0.1"
 }
 

@@ -10,8 +10,8 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url)
-    const page = parseInt(searchParams.get("page") || "1")
-    const limit = parseInt(searchParams.get("limit") || "20")
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1") || 1)
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "20") || 20))
     const search = searchParams.get("search") || ""
 
     const where = search
@@ -62,6 +62,20 @@ export async function PATCH(request: Request) {
     const { userId, role } = await request.json()
     if (!userId || !["USER", "ADMIN"].includes(role)) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 })
+    }
+
+    // Prevent admin from demoting themselves (could lock out the last admin)
+    if (userId === session.user.id && role !== "ADMIN") {
+      return NextResponse.json(
+        { error: "Cannot change your own role. Ask another admin." },
+        { status: 400 },
+      )
+    }
+
+    // Verify target user exists
+    const target = await prisma.user.findUnique({ where: { id: userId } })
+    if (!target) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
     const user = await prisma.user.update({

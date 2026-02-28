@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { hashToken } from "@/lib/email"
+import { checkRateLimit, getClientIp, rateLimitResponse } from "@/lib/rate-limit"
 import { z } from "zod"
 
 const schema = z.object({
@@ -9,6 +10,9 @@ const schema = z.object({
 
 export async function POST(request: Request) {
   try {
+    const rl = checkRateLimit("auth", getClientIp(request))
+    if (!rl.success) return rateLimitResponse(rl.resetAt)
+
     const body = await request.json()
     const parsed = schema.safeParse(body)
     if (!parsed.success) {

@@ -64,7 +64,7 @@ export async function POST(request: Request) {
 
     // Upload to Vercel Blob
     const blob = await put(`datasets/${session.user.id}/${Date.now()}-${file.name}`, file, {
-      access: "public",
+      access: "private",
     })
 
     // Create dataset record

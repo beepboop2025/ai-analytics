@@ -15,7 +15,9 @@ import { BarChart3, Loader2 } from "lucide-react"
 export function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"
+  const rawCallback = searchParams.get("callbackUrl") || "/dashboard"
+  // Prevent open redirect: only allow relative paths starting with /
+  const callbackUrl = rawCallback.startsWith("/") && !rawCallback.startsWith("//") ? rawCallback : "/dashboard"
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
