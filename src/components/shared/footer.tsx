@@ -3,37 +3,47 @@ import { BarChart3 } from "lucide-react"
 
 const footerLinks = {
   Product: [
-    { href: "/#features", label: "Features" },
+    { href: "/#platform", label: "Platform" },
+    { href: "/#use-cases", label: "Use cases" },
     { href: "/pricing", label: "Pricing" },
-    { href: "/login", label: "Sign In" },
   ],
-  Company: [
-    { href: "#", label: "About" },
-    { href: "#", label: "Blog" },
-    { href: "#", label: "Careers" },
+  Workflow: [
+    { href: "/signup", label: "Start workspace" },
+    { href: "/login", label: "Sign in" },
+    { href: "/dashboard", label: "Dashboard" },
   ],
-  Legal: [
-    { href: "#", label: "Privacy Policy" },
-    { href: "#", label: "Terms of Service" },
-    { href: "#", label: "Cookie Policy" },
+  "Product scope": [
+    { href: "/#platform", label: "Dataset uploads" },
+    { href: "/#platform", label: "AI analysis" },
+    { href: "/#platform", label: "Reports and billing" },
   ],
 }
 
 export function Footer() {
   return (
-    <footer className="border-t bg-muted/30">
+    <footer className="border-t border-border/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(255,255,255,0.75))] dark:bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(15,23,42,0.2))]">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-          <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+        <div className="grid gap-10 md:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr]">
+          <div>
+            <Link href="/" className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,rgba(74,144,226,1),rgba(53,91,184,1))] shadow-lg shadow-primary/20">
                 <BarChart3 className="h-4 w-4 text-primary-foreground" />
               </div>
-              <span className="text-lg font-bold">DataLens AI</span>
+              <div>
+                <div className="text-lg font-semibold">DataLens AI</div>
+                <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">
+                  Decision intelligence
+                </div>
+              </div>
             </Link>
-            <p className="mt-4 text-sm text-muted-foreground">
-              AI-powered data analytics for everyone. Upload, analyze, and generate insights in seconds.
+            <p className="mt-5 max-w-md text-sm leading-7 text-muted-foreground">
+              Built for operators who still live in exported files, recurring reviews, and high-stakes decision memos.
             </p>
+            <div className="mt-5 flex flex-wrap gap-2 text-xs text-muted-foreground">
+              <span className="rounded-full border border-border/70 bg-background/75 px-3 py-1.5">CSV</span>
+              <span className="rounded-full border border-border/70 bg-background/75 px-3 py-1.5">Excel</span>
+              <span className="rounded-full border border-border/70 bg-background/75 px-3 py-1.5">JSON</span>
+            </div>
           </div>
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
@@ -53,7 +63,7 @@ export function Footer() {
             </div>
           ))}
         </div>
-        <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
+        <div className="mt-12 border-t border-border/70 pt-8 text-center text-sm text-muted-foreground">
           &copy; {new Date().getFullYear()} DataLens AI. All rights reserved.
         </div>
       </div>

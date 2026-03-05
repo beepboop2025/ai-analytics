@@ -1,16 +1,16 @@
-import { Hero } from "@/components/marketing/hero"
-import { Features } from "@/components/marketing/features"
-import { Testimonials } from "@/components/marketing/testimonials"
-import { CTA } from "@/components/marketing/cta"
 import type { Metadata } from "next"
+import { CTA } from "@/components/marketing/cta"
+import { Features } from "@/components/marketing/features"
+import { Hero } from "@/components/marketing/hero"
+import { Testimonials } from "@/components/marketing/testimonials"
 
 export const metadata: Metadata = {
-  title: "DataLens AI — AI-Powered Data Analytics",
+  title: "Operational Analytics Workspace",
   description:
-    "Upload datasets, analyze with AI, and generate insights in seconds. Natural language data analysis powered by Claude AI.",
+    "Upload operational datasets, ask questions in plain English, and turn raw exports into board-ready summaries, charts, and reports.",
   openGraph: {
-    title: "DataLens AI — AI-Powered Data Analytics",
-    description: "Upload datasets, analyze with AI, and generate insights in seconds.",
+    title: "DataLens AI | Decision Intelligence for Ops Teams",
+    description: "Executive-ready analytics for finance, revenue operations, and product teams.",
   },
 }
 

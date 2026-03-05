@@ -1,15 +1,15 @@
-import { Sidebar } from "@/components/shared/sidebar"
-import { UserMenu } from "@/components/shared/user-menu"
-import { ThemeToggle } from "@/components/shared/theme-toggle"
-import { MobileSidebar } from "@/components/shared/mobile-sidebar"
 import { EmailVerificationBanner } from "@/components/shared/email-banner"
+import { MobileSidebar } from "@/components/shared/mobile-sidebar"
+import { Sidebar } from "@/components/shared/sidebar"
+import { ThemeToggle } from "@/components/shared/theme-toggle"
+import { UserMenu } from "@/components/shared/user-menu"
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex min-h-screen overflow-hidden">
       <Sidebar />
       <div className="flex flex-1 flex-col overflow-hidden">
-        <header className="flex h-16 items-center justify-between border-b px-4 md:px-6">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border/70 bg-background/75 px-4 backdrop-blur-xl md:px-6">
           <MobileSidebar />
           <div className="flex-1" />
           <div className="flex items-center gap-3">
@@ -18,7 +18,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </header>
         <EmailVerificationBanner />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto px-4 py-5 md:px-6 md:py-6">
+          <div className="mx-auto w-full max-w-7xl">{children}</div>
+        </main>
       </div>
     </div>
   )
