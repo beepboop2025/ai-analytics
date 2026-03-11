@@ -64,20 +64,23 @@ export default function BillingPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <div>
+      <div className="animate-fade-in-up">
         <h1 className="text-2xl font-bold">Billing</h1>
         <p className="text-muted-foreground">Manage your subscription and billing</p>
       </div>
 
       {/* Current Plan */}
-      <Card>
+      <Card className="surface-panel border-border/50 animate-fade-in-up animate-delay-100">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
               <CardTitle>Current Plan</CardTitle>
               <CardDescription>Your active subscription</CardDescription>
             </div>
-            <Badge variant={plan === "FREE" ? "secondary" : "default"} className="text-base px-3 py-1">
+            <Badge
+              variant={plan === "FREE" ? "secondary" : "default"}
+              className={`rounded-full px-3 py-1 text-base ${plan !== "FREE" ? "animate-subtle-pulse" : ""}`}
+            >
               {plan}
             </Badge>
           </div>
@@ -85,14 +88,14 @@ export default function BillingPage() {
         <CardContent>
           {loading ? (
             <div className="space-y-3">
-              <Skeleton className="h-5 w-48" />
-              <Skeleton className="h-5 w-36" />
+              <Skeleton className="h-5 w-48 rounded-lg" />
+              <Skeleton className="h-5 w-36 rounded-lg" />
             </div>
           ) : (
             <div className="space-y-4">
-              <ul className="space-y-2">
+              <ul className="space-y-2.5">
                 {features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-2 text-sm">
+                  <li key={feature} className="flex items-center gap-2.5 text-sm">
                     <Check className="h-4 w-4 text-primary" />
                     {feature}
                   </li>
@@ -110,7 +113,7 @@ export default function BillingPage() {
       </Card>
 
       {/* Usage */}
-      <Card>
+      <Card className="surface-panel border-border/50 animate-fade-in-up animate-delay-200">
         <CardHeader>
           <CardTitle>Usage This Period</CardTitle>
           <CardDescription>Track your resource consumption</CardDescription>
@@ -118,14 +121,14 @@ export default function BillingPage() {
         <CardContent className="space-y-4">
           {loading ? (
             <div className="space-y-4">
-              <Skeleton className="h-8 w-full" />
-              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full rounded-xl" />
+              <Skeleton className="h-8 w-full rounded-xl" />
             </div>
           ) : (
             <>
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span>AI Queries</span>
+              <div className="rounded-2xl border border-border/50 bg-background/60 p-4 backdrop-blur-sm">
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="font-medium">AI Queries</span>
                   <span className="text-muted-foreground">
                     {subscription?.queriesUsed || 0} /{" "}
                     {subscription?.queriesLimit === -1 ? "Unlimited" : subscription?.queriesLimit || 10}
@@ -139,9 +142,9 @@ export default function BillingPage() {
                   }
                 />
               </div>
-              <div>
+              <div className="rounded-2xl border border-border/50 bg-background/60 p-4 backdrop-blur-sm">
                 <div className="flex justify-between text-sm mb-1">
-                  <span>Datasets</span>
+                  <span className="font-medium">Datasets</span>
                   <span className="text-muted-foreground">
                     {subscription?.datasetsLimit === -1 ? "Unlimited" : `Limit: ${subscription?.datasetsLimit || 3}`}
                   </span>
@@ -153,18 +156,18 @@ export default function BillingPage() {
       </Card>
 
       {/* Actions */}
-      <Card>
+      <Card className="surface-panel border-border/50 animate-fade-in-up animate-delay-300">
         <CardHeader>
           <CardTitle>Manage Subscription</CardTitle>
           <CardDescription>Change your plan, update payment method, or view invoices</CardDescription>
         </CardHeader>
         <CardContent className="flex gap-3">
           {plan === "FREE" ? (
-            <Button asChild>
+            <Button asChild className="btn-gradient">
               <a href="/pricing">Upgrade Plan</a>
             </Button>
           ) : (
-            <Button onClick={openPortal} disabled={portalLoading}>
+            <Button onClick={openPortal} disabled={portalLoading} className="rounded-full transition-all duration-200">
               {portalLoading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (

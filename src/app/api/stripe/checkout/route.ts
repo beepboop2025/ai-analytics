@@ -10,6 +10,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
+    if (!session.user.email) {
+      return NextResponse.json({ error: "Email required" }, { status: 400 })
+    }
+
     const { plan } = await request.json()
 
     const priceId =

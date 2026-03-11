@@ -19,7 +19,7 @@ function hashToken(token: string): string {
 }
 
 export async function sendPasswordResetEmail(email: string, token: string) {
-  const resetUrl = `${getAppUrl()}/reset-password?token=${token}`
+  const resetUrl = `${getAppUrl()}/reset-password?token=${encodeURIComponent(token)}`
 
   await getResend().emails.send({
     from: FROM_EMAIL,
@@ -42,7 +42,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
 }
 
 export async function sendVerificationEmail(email: string, token: string) {
-  const verifyUrl = `${getAppUrl()}/verify-email?token=${token}`
+  const verifyUrl = `${getAppUrl()}/verify-email?token=${encodeURIComponent(token)}`
 
   await getResend().emails.send({
     from: FROM_EMAIL,

@@ -9,18 +9,21 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const subscription = await prisma.subscription.findUnique({
-      where: { userId: session.user.id },
-      select: {
-        plan: true,
-        status: true,
-        queriesUsed: true,
-        queriesLimit: true,
-        datasetsLimit: true,
-        maxFileSize: true,
-        currentPeriodEnd: true,
-      },
-    })
+    const [subscription, datasetsUsed] = await Promise.all([
+      prisma.subscription.findUnique({
+        where: { userId: session.user.id },
+        select: {
+          plan: true,
+          status: true,
+          queriesUsed: true,
+          queriesLimit: true,
+          datasetsLimit: true,
+          maxFileSize: true,
+          currentPeriodEnd: true,
+        },
+      }),
+      prisma.dataset.count({ where: { userId: session.user.id } }),
+    ])
 
     if (!subscription) {
       return NextResponse.json({
@@ -28,13 +31,14 @@ export async function GET() {
         status: "active",
         queriesUsed: 0,
         queriesLimit: 10,
+        datasetsUsed,
         datasetsLimit: 3,
         maxFileSize: 5,
         currentPeriodEnd: null,
       })
     }
 
-    return NextResponse.json(subscription)
+    return NextResponse.json({ ...subscription, datasetsUsed })
   } catch (error) {
     console.error("Subscription fetch error:", error)
     return NextResponse.json({ error: "Failed to fetch subscription" }, { status: 500 })

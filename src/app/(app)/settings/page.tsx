@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useSession, signOut } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -17,22 +17,28 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { toast } from "sonner"
-import { Loader2, Mail } from "lucide-react"
+import { Loader2, Mail, Check } from "lucide-react"
 
 export default function SettingsPage() {
   const { data: session, update } = useSession()
   const [name, setName] = useState(session?.user?.name || "")
   const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState("")
   const [deleting, setDeleting] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [resending, setResending] = useState(false)
+
+  useEffect(() => {
+    if (session?.user?.name) setName(session.user.name)
+  }, [session?.user?.name])
 
   const emailVerified = session?.user?.emailVerified
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true)
+    setSaved(false)
     try {
       const res = await fetch("/api/user/profile", {
         method: "PATCH",
@@ -41,7 +47,9 @@ export default function SettingsPage() {
       })
       if (res.ok) {
         await update({ name })
+        setSaved(true)
         toast.success("Profile updated")
+        setTimeout(() => setSaved(false), 2500)
       } else {
         toast.error("Failed to update profile")
       }
@@ -94,12 +102,12 @@ export default function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <div>
+      <div className="animate-fade-in-up">
         <h1 className="text-2xl font-bold">Settings</h1>
         <p className="text-muted-foreground">Manage your account settings</p>
       </div>
 
-      <Card>
+      <Card className="surface-panel border-border/50 animate-fade-in-up animate-delay-100">
         <CardHeader>
           <CardTitle>Profile</CardTitle>
           <CardDescription>Update your personal information</CardDescription>
@@ -113,12 +121,13 @@ export default function SettingsPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
+                className="rounded-xl"
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <div className="flex items-center gap-2">
-                <Input id="email" value={session?.user?.email || ""} disabled className="flex-1" />
+                <Input id="email" value={session?.user?.email || ""} disabled className="flex-1 rounded-xl" />
                 {!emailVerified && (
                   <Button
                     type="button"
@@ -126,6 +135,7 @@ export default function SettingsPage() {
                     size="sm"
                     onClick={handleResendVerification}
                     disabled={resending}
+                    className="rounded-full transition-all duration-200"
                   >
                     {resending ? (
                       <Loader2 className="mr-1 h-3 w-3 animate-spin" />
@@ -137,18 +147,26 @@ export default function SettingsPage() {
                 )}
               </div>
               <p className="text-xs text-muted-foreground">
-                {emailVerified ? "Email verified" : "Email not verified — check your inbox or click Verify"}
+                {emailVerified ? "Email verified" : "Email not verified -- check your inbox or click Verify"}
               </p>
             </div>
-            <Button type="submit" disabled={saving}>
-              {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Save changes
+            <Button
+              type="submit"
+              disabled={saving}
+              className={`rounded-full px-6 transition-all duration-300 ${saved ? "bg-green-600 hover:bg-green-600" : ""}`}
+            >
+              {saving ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : saved ? (
+                <Check className="mr-2 h-4 w-4 animate-check-pop" />
+              ) : null}
+              {saved ? "Saved!" : "Save changes"}
             </Button>
           </form>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="surface-panel border-border/50 animate-fade-in-up animate-delay-200">
         <CardHeader>
           <CardTitle>Account</CardTitle>
           <CardDescription>Manage your account settings</CardDescription>
@@ -158,7 +176,7 @@ export default function SettingsPage() {
             <Label>Account ID</Label>
             <p className="mt-1 font-mono text-sm text-muted-foreground">{session?.user?.id}</p>
           </div>
-          <Separator />
+          <Separator className="opacity-50" />
           <div>
             <h4 className="text-sm font-medium text-destructive">Danger Zone</h4>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -166,11 +184,11 @@ export default function SettingsPage() {
             </p>
             <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) setDeleteConfirm("") }}>
               <DialogTrigger asChild>
-                <Button variant="destructive" size="sm" className="mt-3">
+                <Button variant="destructive" size="sm" className="mt-3 rounded-full">
                   Delete Account
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="rounded-2xl border-border/50 bg-background/95 backdrop-blur-xl">
                 <DialogHeader>
                   <DialogTitle>Delete Account</DialogTitle>
                   <DialogDescription>
@@ -186,16 +204,18 @@ export default function SettingsPage() {
                     value={deleteConfirm}
                     onChange={(e) => setDeleteConfirm(e.target.value)}
                     placeholder="DELETE"
+                    className="rounded-xl"
                   />
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                  <Button variant="outline" onClick={() => setDialogOpen(false)} className="rounded-full">
                     Cancel
                   </Button>
                   <Button
                     variant="destructive"
                     onClick={handleDelete}
                     disabled={deleteConfirm !== "DELETE" || deleting}
+                    className="rounded-full"
                   >
                     {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Permanently Delete

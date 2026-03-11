@@ -45,11 +45,11 @@ function VerifyEmailContent() {
   }, [token])
 
   return (
-    <Card>
+    <Card className="glass-card border-border/40 shadow-[0_16px_48px_-16px_rgba(30,58,138,0.12)] dark:shadow-[0_16px_48px_-16px_rgba(0,0,0,0.5)]">
       <CardHeader className="text-center">
         {status === "loading" && (
           <>
-            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center">
+            <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
             <CardTitle className="text-2xl">Verifying email...</CardTitle>
@@ -59,7 +59,7 @@ function VerifyEmailContent() {
 
         {status === "success" && (
           <>
-            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
+            <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 dark:bg-green-900 animate-check-pop">
               <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
             </div>
             <CardTitle className="text-2xl">Email Verified</CardTitle>
@@ -69,7 +69,7 @@ function VerifyEmailContent() {
 
         {status === "error" && (
           <>
-            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900">
+            <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-red-100 dark:bg-red-900 animate-fade-in-up">
               <XCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
             </div>
             <CardTitle className="text-2xl">Verification Failed</CardTitle>
@@ -79,11 +79,11 @@ function VerifyEmailContent() {
       </CardHeader>
       <CardFooter className="justify-center">
         {status === "success" ? (
-          <Link href="/dashboard" className="text-sm text-primary hover:underline">
+          <Link href="/dashboard" className="text-sm font-medium text-primary transition-colors duration-200 hover:text-primary/80">
             Go to Dashboard
           </Link>
         ) : status === "error" ? (
-          <Link href="/login" className="text-sm text-primary hover:underline">
+          <Link href="/login" className="text-sm font-medium text-primary transition-colors duration-200 hover:text-primary/80">
             Back to sign in
           </Link>
         ) : null}
@@ -95,7 +95,7 @@ function VerifyEmailContent() {
 export default function VerifyEmailPage() {
   return (
     <Suspense fallback={
-      <Card>
+      <Card className="glass-card border-border/40">
         <CardHeader className="text-center">
           <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
         </CardHeader>

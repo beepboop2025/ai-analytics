@@ -91,6 +91,9 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
+    const rl = checkRateLimit("general", getClientIp(request))
+    if (!rl.success) return rateLimitResponse(rl.resetAt)
+
     const session = await auth()
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

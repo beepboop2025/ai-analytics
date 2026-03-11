@@ -11,7 +11,10 @@ const LIMITS: Record<RateLimitCategory, { max: number; windowMs: number }> = {
 const requests = new Map<string, number[]>()
 
 // Cleanup stale entries every 5 minutes
-setInterval(() => {
+// NOTE: This in-memory rate limiter works for sustained load on a single instance
+// but does not persist across serverless cold starts. For distributed rate limiting,
+// consider using Redis or a similar external store.
+const cleanupInterval = setInterval(() => {
   const now = Date.now()
   for (const [key, timestamps] of requests) {
     const fresh = timestamps.filter((t) => now - t < 120_000)
@@ -22,6 +25,7 @@ setInterval(() => {
     }
   }
 }, 300_000)
+cleanupInterval.unref()
 
 export function checkRateLimit(category: RateLimitCategory, ip: string) {
   const { max, windowMs } = LIMITS[category]

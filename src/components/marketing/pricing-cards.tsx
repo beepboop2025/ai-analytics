@@ -103,14 +103,14 @@ export function PricingCards() {
       {plans.map((plan) => (
         <Card
           key={plan.name}
-          className={`relative flex h-full flex-col overflow-hidden border-border/70 py-0 ${
+          className={`relative flex h-full flex-col overflow-hidden border-border/50 py-0 transition-all duration-300 hover:-translate-y-2 ${
             plan.popular
-              ? "surface-panel scale-[1.01] shadow-[0_28px_80px_-38px_rgba(53,91,184,0.45)]"
-              : "surface-panel"
+              ? "surface-panel scale-[1.01] shadow-[0_20px_60px_-24px_rgba(30,58,138,0.3)] dark:shadow-[0_20px_60px_-24px_rgba(0,0,0,0.6)] ring-1 ring-primary/20 hover:shadow-[0_28px_72px_-24px_rgba(30,58,138,0.35)] dark:hover:shadow-[0_28px_72px_-24px_rgba(0,0,0,0.65)]"
+              : "surface-panel hover:shadow-[0_16px_40px_-12px_rgba(30,58,138,0.12)] hover:border-primary/15 dark:hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.45)] dark:hover:border-primary/10"
           }`}
         >
           {plan.popular && (
-            <Badge className="absolute left-6 top-6 rounded-full px-3 py-1">
+            <Badge className="absolute left-6 top-6 rounded-full px-3 py-1 animate-subtle-pulse">
               Most popular
             </Badge>
           )}
@@ -132,9 +132,9 @@ export function PricingCards() {
             <p className="mt-3 text-sm leading-6 text-muted-foreground">{plan.bestFor}</p>
           </CardHeader>
           <CardContent className="flex-1">
-            <ul className="space-y-3 rounded-[1.5rem] border border-border/70 bg-muted/35 p-4">
+            <ul className="space-y-3 rounded-2xl border border-border/50 bg-muted/25 p-4">
               {plan.features.map((feature) => (
-                <li key={feature} className="flex items-center gap-2 text-sm">
+                <li key={feature} className="flex items-center gap-2.5 text-sm">
                   <Check className="h-4 w-4 text-primary" />
                   {feature}
                 </li>
@@ -143,12 +143,12 @@ export function PricingCards() {
           </CardContent>
           <CardFooter className="p-6 pt-0">
             <Button
-              className="h-11 w-full rounded-full"
+              className={`group h-11 w-full ${plan.popular ? "btn-gradient" : "rounded-full transition-all duration-300 hover:bg-primary/5 hover:border-primary/25"}`}
               variant={plan.popular ? "default" : "outline"}
               onClick={() => handleCheckout(plan)}
             >
               {plan.cta}
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
             </Button>
           </CardFooter>
         </Card>

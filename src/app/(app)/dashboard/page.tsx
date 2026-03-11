@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import type { SubscriptionInfo } from "@/types"
 import { Badge } from "@/components/ui/badge"
@@ -80,6 +80,33 @@ function toPercent(used: number, limit: number) {
   return Math.min(100, Math.round((used / limit) * 100))
 }
 
+/** Animates a number from 0 to target over ~800ms */
+function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string }) {
+  const [display, setDisplay] = useState(0)
+  const ref = useRef<number | null>(null)
+
+  useEffect(() => {
+    if (value === 0) { setDisplay(0); return }
+    const duration = 800
+    const start = performance.now()
+
+    function tick(now: number) {
+      const elapsed = now - start
+      const progress = Math.min(elapsed / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3) // ease-out cubic
+      setDisplay(Math.round(eased * value))
+      if (progress < 1) {
+        ref.current = requestAnimationFrame(tick)
+      }
+    }
+
+    ref.current = requestAnimationFrame(tick)
+    return () => { if (ref.current) cancelAnimationFrame(ref.current) }
+  }, [value])
+
+  return <>{display.toLocaleString()}{suffix}</>
+}
+
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardState | null>(null)
   const [loading, setLoading] = useState(true)
@@ -121,22 +148,22 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6 animate-fade-in-up">
         <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-          <Card className="surface-panel border-border/70 py-0">
+          <Card className="surface-panel border-border/50 py-0">
             <CardContent className="p-6 sm:p-8">
-              <Skeleton className="h-6 w-32" />
-              <Skeleton className="mt-4 h-12 w-full max-w-2xl" />
+              <Skeleton className="h-6 w-32 rounded-lg" />
+              <Skeleton className="mt-4 h-12 w-full max-w-2xl rounded-xl" />
               <div className="mt-8 grid gap-4 sm:grid-cols-3">
                 {Array.from({ length: 3 }).map((_, index) => (
-                  <Skeleton key={index} className="h-28 rounded-2xl" />
+                  <Skeleton key={index} className="h-28 rounded-2xl" style={{ animationDelay: `${index * 150}ms` }} />
                 ))}
               </div>
             </CardContent>
           </Card>
-          <Card className="surface-panel border-border/70 py-0">
+          <Card className="surface-panel border-border/50 py-0">
             <CardContent className="p-6">
-              <Skeleton className="h-6 w-24" />
+              <Skeleton className="h-6 w-24 rounded-lg" />
               <Skeleton className="mt-6 h-28 w-full rounded-2xl" />
               <Skeleton className="mt-4 h-28 w-full rounded-2xl" />
             </CardContent>
@@ -145,13 +172,13 @@ export default function DashboardPage() {
 
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, index) => (
-            <Card key={index} className="surface-panel border-border/70 py-0">
+            <Card key={index} className="surface-panel border-border/50 py-0">
               <CardHeader className="pb-2">
-                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-4 w-24 rounded-lg" />
               </CardHeader>
               <CardContent className="pb-6">
-                <Skeleton className="h-8 w-24" />
-                <Skeleton className="mt-4 h-4 w-32" />
+                <Skeleton className="h-8 w-24 rounded-lg" />
+                <Skeleton className="mt-4 h-4 w-32 rounded-lg" />
               </CardContent>
             </Card>
           ))}
@@ -183,11 +210,11 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <div className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
-        <Card className="surface-panel overflow-hidden border-border/70 py-0">
+        <Card className="surface-panel animate-fade-in-up overflow-hidden border-border/50 py-0">
           <CardContent className="p-6 sm:p-8">
             <div className="flex flex-wrap items-center gap-3">
-              <Badge className="rounded-full px-3 py-1">Workspace overview</Badge>
-              <Badge variant="outline" className="rounded-full px-3 py-1">
+              <Badge className="rounded-full px-3 py-1 shadow-[0_2px_8px_-2px_rgba(30,58,138,0.2)]">Workspace overview</Badge>
+              <Badge variant="outline" className="rounded-full px-3 py-1 animate-subtle-pulse">
                 {subscription.plan} plan
               </Badge>
             </div>
@@ -201,45 +228,45 @@ export default function DashboardPage() {
             <p className="mt-4 max-w-2xl text-base leading-7 text-muted-foreground">{summary}</p>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
-              <div className="metric-chip">
-                <div className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                  Datasets ready
-                </div>
-                <div className="mt-4 text-3xl font-semibold tracking-tight">{datasets.length}</div>
-                <div className="mt-2 text-sm text-muted-foreground">
-                  {subscription.datasetsLimit === -1
+              {[
+                {
+                  label: "Datasets ready",
+                  value: datasets.length,
+                  detail: subscription.datasetsLimit === -1
                     ? "Unlimited capacity on your plan"
-                    : `${datasets.length} of ${subscription.datasetsLimit} dataset slots in use`}
-                </div>
-              </div>
-
-              <div className="metric-chip">
-                <div className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                  Queries remaining
-                </div>
-                <div className="mt-4 text-3xl font-semibold tracking-tight">{queriesRemaining}</div>
-                <div className="mt-2 text-sm text-muted-foreground">
-                  {subscription.queriesLimit === -1
+                    : `${datasets.length} of ${subscription.datasetsLimit} dataset slots in use`,
+                },
+                {
+                  label: "Queries remaining",
+                  value: subscription.queriesLimit === -1 ? -1 : Math.max(subscription.queriesLimit - subscription.queriesUsed, 0),
+                  displayOverride: queriesRemaining,
+                  detail: subscription.queriesLimit === -1
                     ? "No monthly cap on AI analysis"
-                    : `${subscription.queriesUsed} used of ${subscription.queriesLimit} this cycle`}
+                    : `${subscription.queriesUsed} used of ${subscription.queriesLimit} this cycle`,
+                },
+                {
+                  label: "Latest import",
+                  displayOverride: latestDataset ? formatDate(latestDataset.createdAt) : "No uploads yet",
+                  detail: latestDataset ? latestDataset.name : "Upload a dataset to activate the workspace",
+                  isDate: true,
+                },
+              ].map((item, i) => (
+                <div key={item.label} className={`metric-chip animate-fade-in-up animate-delay-${(i + 1) * 100}`}>
+                  <div className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                    {item.label}
+                  </div>
+                  <div className={`mt-4 font-semibold tracking-tight ${item.isDate ? "text-2xl" : "text-3xl"}`}>
+                    {item.displayOverride ?? <AnimatedNumber value={item.value ?? 0} />}
+                  </div>
+                  <div className="mt-2 text-sm text-muted-foreground">
+                    {item.detail}
+                  </div>
                 </div>
-              </div>
-
-              <div className="metric-chip">
-                <div className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                  Latest import
-                </div>
-                <div className="mt-4 text-2xl font-semibold tracking-tight">
-                  {latestDataset ? formatDate(latestDataset.createdAt) : "No uploads yet"}
-                </div>
-                <div className="mt-2 text-sm text-muted-foreground">
-                  {latestDataset ? latestDataset.name : "Upload a dataset to activate the workspace"}
-                </div>
-              </div>
+              ))}
             </div>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button asChild className="h-11 rounded-full px-5 shadow-lg shadow-primary/20">
+              <Button asChild className="btn-gradient h-11 px-6">
                 <Link href="/datasets">
                   Upload dataset
                   <ArrowRight className="h-4 w-4" />
@@ -248,7 +275,7 @@ export default function DashboardPage() {
               <Button
                 asChild
                 variant="outline"
-                className="h-11 rounded-full border-border/80 bg-background/70 px-5 backdrop-blur"
+                className="h-11 rounded-full border-border/60 bg-background/60 px-5 backdrop-blur-sm transition-all duration-300 hover:bg-background/80"
               >
                 <Link href="/analyze">Open analysis workspace</Link>
               </Button>
@@ -256,13 +283,13 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="surface-panel border-border/70 py-0">
+        <Card className="surface-panel animate-fade-in-up animate-delay-200 border-border/50 py-0">
           <CardHeader className="p-6 pb-3">
             <CardDescription>Plan health</CardDescription>
             <CardTitle className="text-2xl">{subscription.plan} workspace</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6 pb-6">
-            <div className="rounded-[1.5rem] border border-border/70 bg-background/75 p-4">
+            <div className="rounded-2xl border border-border/50 bg-background/60 p-4 backdrop-blur-sm">
               <div className="flex items-center justify-between text-sm">
                 <span className="font-medium">Dataset capacity</span>
                 <span className="text-muted-foreground">
@@ -274,7 +301,7 @@ export default function DashboardPage() {
               <Progress value={datasetProgress} className="mt-4" />
             </div>
 
-            <div className="rounded-[1.5rem] border border-border/70 bg-background/75 p-4">
+            <div className="rounded-2xl border border-border/50 bg-background/60 p-4 backdrop-blur-sm">
               <div className="flex items-center justify-between text-sm">
                 <span className="font-medium">AI usage</span>
                 <span className="text-muted-foreground">
@@ -286,14 +313,14 @@ export default function DashboardPage() {
               <Progress value={queryProgress} className="mt-4" />
             </div>
 
-            <div className="rounded-[1.5rem] border border-border/70 bg-muted/40 p-4 text-sm leading-7 text-muted-foreground">
+            <div className="rounded-2xl border border-border/50 bg-muted/30 p-4 text-sm leading-7 text-muted-foreground">
               {subscription.plan === "FREE"
                 ? "The free workspace is enough to validate the workflow. Upgrade when recurring analysis becomes part of the operating cadence."
                 : "Your plan supports a recurring analysis workflow. Keep an eye on dataset volume and upload size as usage grows."}
             </div>
 
             {subscription.plan === "FREE" && (
-              <Button asChild variant="outline" className="h-11 w-full rounded-full">
+              <Button asChild variant="outline" className="h-11 w-full rounded-full transition-all duration-300 hover:bg-primary/5">
                 <Link href="/pricing">Compare paid plans</Link>
               </Button>
             )}
@@ -302,127 +329,69 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <Card className="surface-panel border-border/70 py-0">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Rows tracked</CardTitle>
-            <Database className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="pb-6">
-            <div className="text-3xl font-semibold tracking-tight">{totalRows.toLocaleString()}</div>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Total rows available across your uploaded datasets.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="surface-panel border-border/70 py-0">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Data footprint</CardTitle>
-            <HardDrive className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="pb-6">
-            <div className="text-3xl font-semibold tracking-tight">{formatFileSize(totalStorage)}</div>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Current stored file size across uploaded datasets.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="surface-panel border-border/70 py-0">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Formats in play</CardTitle>
-            <Layers3 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="pb-6">
-            <div className="text-3xl font-semibold tracking-tight">{formats.length}</div>
-            <p className="mt-3 text-sm text-muted-foreground">
-              {formats.length > 0 ? formats.join(", ") : "Upload a file to start tracking formats."}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="surface-panel border-border/70 py-0">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Average columns</CardTitle>
-            <BarChart3 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="pb-6">
-            <div className="text-3xl font-semibold tracking-tight">{averageColumns}</div>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Average column count per dataset based on recorded schema details.
-            </p>
-          </CardContent>
-        </Card>
+        {[
+          { title: "Rows tracked", value: totalRows, detail: "Total rows available across your uploaded datasets.", icon: Database },
+          { title: "Data footprint", value: totalStorage, displayOverride: formatFileSize(totalStorage), detail: "Current stored file size across uploaded datasets.", icon: HardDrive },
+          { title: "Formats in play", value: formats.length, detail: formats.length > 0 ? formats.join(", ") : "Upload a file to start tracking formats.", icon: Layers3 },
+          { title: "Average columns", value: averageColumns, detail: "Average column count per dataset based on recorded schema details.", icon: BarChart3 },
+        ].map((stat, i) => (
+          <Card key={stat.title} className={`surface-panel group border-border/50 py-0 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_16px_40px_-12px_rgba(30,58,138,0.12)] hover:border-primary/15 dark:hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.45)] dark:hover:border-primary/10 animate-fade-in-up animate-delay-${(i + 1) * 100}`}>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/[0.06] transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-110">
+                <stat.icon className="h-4 w-4 text-muted-foreground transition-colors duration-300 group-hover:text-primary" />
+              </div>
+            </CardHeader>
+            <CardContent className="pb-6">
+              <div className="text-3xl font-semibold tracking-tight">
+                {stat.displayOverride ?? <AnimatedNumber value={stat.value} />}
+              </div>
+              <p className="mt-3 text-sm text-muted-foreground">
+                {stat.detail}
+              </p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <Card className="surface-panel border-border/70 py-0 transition-transform hover:-translate-y-1">
-          <CardHeader>
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">
-              <Upload className="h-5 w-5 text-primary" />
-            </div>
-            <CardTitle className="text-base">Add fresh operational data</CardTitle>
-            <CardDescription>Upload CSV, Excel, or JSON exports and keep your workspace current.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild variant="outline" size="sm" className="rounded-full">
-              <Link href="/datasets">
-                Open datasets
-                <ArrowRight className="h-3 w-3" />
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card className="surface-panel border-border/70 py-0 transition-transform hover:-translate-y-1">
-          <CardHeader>
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">
-              <MessageSquare className="h-5 w-5 text-primary" />
-            </div>
-            <CardTitle className="text-base">Run AI analysis</CardTitle>
-            <CardDescription>Move from exported rows to a narrative answer with plain-English prompts.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild variant="outline" size="sm" className="rounded-full">
-              <Link href="/analyze">
-                Analyze data
-                <ArrowRight className="h-3 w-3" />
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card className="surface-panel border-border/70 py-0 transition-transform hover:-translate-y-1">
-          <CardHeader>
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">
-              <FileText className="h-5 w-5 text-primary" />
-            </div>
-            <CardTitle className="text-base">Package the output</CardTitle>
-            <CardDescription>Use reports to turn findings into an artifact the rest of the team can consume.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild variant="outline" size="sm" className="rounded-full">
-              <Link href="/reports">
-                View reports
-                <ArrowRight className="h-3 w-3" />
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
+        {[
+          { icon: Upload, title: "Add fresh operational data", desc: "Upload CSV, Excel, or JSON exports and keep your workspace current.", link: "/datasets", linkText: "Open datasets" },
+          { icon: MessageSquare, title: "Run AI analysis", desc: "Move from exported rows to a narrative answer with plain-English prompts.", link: "/analyze", linkText: "Analyze data" },
+          { icon: FileText, title: "Package the output", desc: "Use reports to turn findings into an artifact the rest of the team can consume.", link: "/reports", linkText: "View reports" },
+        ].map((action, i) => (
+          <Card key={action.title} className={`surface-panel group border-border/50 py-0 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_48px_-16px_rgba(30,58,138,0.14)] hover:border-primary/20 dark:hover:shadow-[0_20px_48px_-16px_rgba(0,0,0,0.5)] dark:hover:border-primary/15 animate-fade-in-up animate-delay-${(i + 3) * 100}`}>
+            <CardHeader>
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 transition-all duration-300 group-hover:bg-primary/15 group-hover:scale-110">
+                <action.icon className="h-5 w-5 text-primary" />
+              </div>
+              <CardTitle className="text-base">{action.title}</CardTitle>
+              <CardDescription>{action.desc}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button asChild variant="outline" size="sm" className="rounded-full transition-all duration-300 group-hover:bg-primary/5">
+                <Link href={action.link}>
+                  {action.linkText}
+                  <ArrowRight className="h-3 w-3" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-        <Card className="surface-panel border-border/70 py-0">
+        <Card className="surface-panel animate-fade-in-up animate-delay-500 border-border/50 py-0">
           <CardHeader>
             <CardTitle>Recent datasets</CardTitle>
             <CardDescription>Your latest uploads, with the context needed to start analysis quickly.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3 pb-6">
             {datasets.length > 0 ? (
-              datasets.slice(0, 5).map((dataset) => (
+              datasets.slice(0, 5).map((dataset, i) => (
                 <div
                   key={dataset.id}
-                  className="flex flex-col gap-4 rounded-[1.5rem] border border-border/70 bg-background/75 p-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between"
+                  className={`flex flex-col gap-4 rounded-2xl border border-border/50 bg-background/60 p-4 backdrop-blur-sm transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 sm:flex-row sm:items-center sm:justify-between animate-fade-in-up animate-delay-${(i + 1) * 100}`}
                 >
                   <div className="flex items-start gap-3">
                     <div className="mt-1 flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">
@@ -444,13 +413,13 @@ export default function DashboardPage() {
                     </div>
                   </div>
 
-                  <Button asChild variant="ghost" size="sm" className="rounded-full">
+                  <Button asChild variant="ghost" size="sm" className="rounded-full transition-all duration-200 hover:bg-primary/5">
                     <Link href={`/analyze?dataset=${dataset.id}`}>Analyze dataset</Link>
                   </Button>
                 </div>
               ))
             ) : (
-              <div className="rounded-[1.5rem] border border-dashed border-border/80 bg-muted/30 p-8 text-center">
+              <div className="rounded-2xl border border-dashed border-border/60 bg-muted/20 p-8 text-center">
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
                   <Upload className="h-5 w-5 text-primary" />
                 </div>
@@ -466,47 +435,29 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="surface-panel border-border/70 py-0">
+        <Card className="surface-panel animate-fade-in-up animate-delay-600 border-border/50 py-0">
           <CardHeader>
             <CardTitle>Recommended workflow</CardTitle>
             <CardDescription>The product is strongest when used as a repeatable operating routine.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 pb-6">
-            <div className="rounded-[1.5rem] border border-border/70 bg-muted/40 p-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">
-                  <Upload className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <div className="text-sm font-semibold">1. Load the latest export</div>
-                  <div className="text-sm text-muted-foreground">Keep the workspace current before each review cycle.</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="rounded-[1.5rem] border border-border/70 bg-muted/40 p-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">
-                  <Sparkles className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <div className="text-sm font-semibold">2. Ask for the business story</div>
-                  <div className="text-sm text-muted-foreground">Use natural language to isolate trends, anomalies, and segments.</div>
+            {[
+              { icon: Upload, step: "1", title: "Load the latest export", desc: "Keep the workspace current before each review cycle." },
+              { icon: Sparkles, step: "2", title: "Ask for the business story", desc: "Use natural language to isolate trends, anomalies, and segments." },
+              { icon: CalendarClock, step: "3", title: "Turn it into a recurring artifact", desc: "Save reports and make the workspace part of the team cadence." },
+            ].map((item, i) => (
+              <div key={item.step} className={`rounded-2xl border border-border/50 bg-muted/30 p-4 transition-all duration-300 hover:bg-muted/45 animate-fade-in-up animate-delay-${(i + 6) * 100}`}>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">
+                    <item.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold">{item.step}. {item.title}</div>
+                    <div className="text-sm text-muted-foreground">{item.desc}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div className="rounded-[1.5rem] border border-border/70 bg-muted/40 p-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">
-                  <CalendarClock className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <div className="text-sm font-semibold">3. Turn it into a recurring artifact</div>
-                  <div className="text-sm text-muted-foreground">Save reports and make the workspace part of the team cadence.</div>
-                </div>
-              </div>
-            </div>
+            ))}
           </CardContent>
         </Card>
       </div>

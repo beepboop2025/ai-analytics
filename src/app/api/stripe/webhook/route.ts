@@ -48,7 +48,7 @@ export async function POST(request: Request) {
             stripeSubscriptionId: subscriptionId,
             plan,
             status: "active",
-            currentPeriodEnd: new Date(stripeSubscription.items.data[0].current_period_end * 1000),
+            currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000),
             queriesLimit: limits.queriesLimit,
             datasetsLimit: limits.datasetsLimit,
             maxFileSize: limits.maxFileSize,
@@ -77,7 +77,7 @@ export async function POST(request: Request) {
           data: {
             plan,
             status: subscription.status,
-            currentPeriodEnd: new Date(subscription.items.data[0].current_period_end * 1000),
+            currentPeriodEnd: new Date(subscription.current_period_end * 1000),
             queriesLimit: limits.queriesLimit,
             datasetsLimit: limits.datasetsLimit,
             maxFileSize: limits.maxFileSize,

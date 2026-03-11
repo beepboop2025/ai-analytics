@@ -59,9 +59,9 @@ export function SignupForm() {
   }
 
   return (
-    <Card>
+    <Card className="glass-card border-border/40 shadow-[0_20px_60px_-16px_rgba(30,58,138,0.15)] dark:shadow-[0_20px_60px_-16px_rgba(0,0,0,0.55)]">
       <CardHeader className="text-center">
-        <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
+        <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-[oklch(0.52_0.12_280)] shadow-lg shadow-primary/25 transition-transform duration-300 hover:scale-105">
           <BarChart3 className="h-6 w-6 text-primary-foreground" />
         </div>
         <CardTitle className="text-2xl">Create an account</CardTitle>
@@ -70,7 +70,7 @@ export function SignupForm() {
       <CardContent className="space-y-4">
         <Button
           variant="outline"
-          className="w-full"
+          className="w-full rounded-xl border-border/50 bg-background/60 backdrop-blur-sm transition-all duration-300 hover:bg-background/80 hover:border-border hover:shadow-[0_2px_12px_-4px_rgba(30,58,138,0.08)]"
           onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
         >
           <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
@@ -83,10 +83,10 @@ export function SignupForm() {
         </Button>
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <Separator />
+            <Separator className="opacity-50" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+            <span className="bg-card/80 px-2 text-muted-foreground backdrop-blur-sm">Or continue with</span>
           </div>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -99,6 +99,7 @@ export function SignupForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              className="rounded-xl"
             />
           </div>
           <div className="space-y-2">
@@ -110,6 +111,7 @@ export function SignupForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="rounded-xl"
             />
           </div>
           <div className="space-y-2">
@@ -122,9 +124,10 @@ export function SignupForm() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={8}
+              className="rounded-xl"
             />
           </div>
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" className="btn-gradient w-full" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Create account
           </Button>
@@ -133,7 +136,7 @@ export function SignupForm() {
       <CardFooter className="justify-center">
         <p className="text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link href="/login" className="text-primary hover:underline">
+          <Link href="/login" className="font-medium text-primary transition-colors duration-200 hover:text-primary/80">
             Sign in
           </Link>
         </p>

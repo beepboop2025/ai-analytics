@@ -1,3 +1,6 @@
+"use client"
+
+import { useEffect, useRef, useState } from "react"
 import {
   BarChart3,
   CreditCard,
@@ -55,10 +58,24 @@ const features = [
 ]
 
 export function Features() {
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisible(true) },
+      { threshold: 0.08 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <section id="platform" className="px-4 py-24 sm:px-6 lg:px-8">
+    <section id="platform" className="px-4 py-24 sm:px-6 lg:px-8" ref={sectionRef}>
       <div className="mx-auto max-w-7xl">
-        <div className="max-w-3xl">
+        <div className={`max-w-3xl ${visible ? "animate-fade-in-up" : "opacity-0"}`}>
           <div className="eyebrow">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
             Platform
@@ -73,13 +90,13 @@ export function Features() {
         </div>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-          {features.map((feature) => (
+          {features.map((feature, i) => (
             <Card
               key={feature.title}
-              className="surface-panel border-border/70 py-0 transition-transform duration-300 hover:-translate-y-1"
+              className={`surface-panel group border-border/50 py-0 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_48px_-16px_rgba(30,58,138,0.14)] hover:border-primary/20 dark:hover:shadow-[0_20px_48px_-16px_rgba(0,0,0,0.5)] dark:hover:border-primary/15 ${visible ? `animate-fade-in-up animate-delay-${(i + 1) * 100}` : "opacity-0"}`}
             >
               <CardHeader className="p-6">
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 transition-all duration-300 group-hover:bg-primary/15 group-hover:scale-110">
                   <feature.icon className="h-5 w-5 text-primary" />
                 </div>
                 <CardTitle className="text-xl">{feature.title}</CardTitle>
@@ -88,7 +105,7 @@ export function Features() {
                   {feature.bullets.map((bullet) => (
                     <span
                       key={bullet}
-                      className="rounded-full border border-border/70 bg-background/70 px-3 py-1.5 text-xs font-medium text-muted-foreground"
+                      className="rounded-full border border-border/50 bg-background/60 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur-sm transition-colors duration-200 group-hover:bg-background/80"
                     >
                       {bullet}
                     </span>

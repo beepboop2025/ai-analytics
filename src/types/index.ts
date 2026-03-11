@@ -15,6 +15,7 @@ export interface SubscriptionInfo {
   status: string
   queriesUsed: number
   queriesLimit: number
+  datasetsUsed: number
   datasetsLimit: number
   maxFileSize: number
   currentPeriodEnd?: Date | null

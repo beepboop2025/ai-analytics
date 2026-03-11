@@ -27,39 +27,39 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="focus:outline-none">
-        <Avatar className="h-8 w-8">
+        <Avatar className="h-9 w-9 ring-2 ring-border/40 transition-all duration-300 hover:ring-primary/30 hover:scale-105 hover:shadow-[0_0_12px_-2px_rgba(30,58,138,0.12)]">
           <AvatarImage src={session.user.image || undefined} alt={session.user.name || "User"} />
-          <AvatarFallback className="text-xs">{initials}</AvatarFallback>
+          <AvatarFallback className="bg-primary/10 text-xs font-semibold text-primary">{initials}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
+      <DropdownMenuContent align="end" className="w-56 rounded-xl border-border/50 bg-background/95 backdrop-blur-xl shadow-[0_8px_32px_-8px_rgba(30,58,138,0.12)] dark:shadow-[0_8px_32px_-8px_rgba(0,0,0,0.4)]">
         <DropdownMenuLabel>
           <div className="flex flex-col">
             <span className="text-sm font-medium">{session.user.name}</span>
             <span className="text-xs text-muted-foreground">{session.user.email}</span>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
+        <DropdownMenuSeparator className="opacity-50" />
         <DropdownMenuItem asChild>
-          <Link href="/settings" className="cursor-pointer">
+          <Link href="/settings" className="cursor-pointer rounded-lg transition-colors duration-150">
             <User className="mr-2 h-4 w-4" />
             Profile
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/settings" className="cursor-pointer">
+          <Link href="/settings" className="cursor-pointer rounded-lg transition-colors duration-150">
             <Settings className="mr-2 h-4 w-4" />
             Settings
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/billing" className="cursor-pointer">
+          <Link href="/billing" className="cursor-pointer rounded-lg transition-colors duration-150">
             <CreditCard className="mr-2 h-4 w-4" />
             Billing
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/" })} className="cursor-pointer text-red-600">
+        <DropdownMenuSeparator className="opacity-50" />
+        <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/" })} className="cursor-pointer rounded-lg text-red-600 transition-colors duration-150">
           <LogOut className="mr-2 h-4 w-4" />
           Sign out
         </DropdownMenuItem>

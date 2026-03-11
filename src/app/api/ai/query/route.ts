@@ -29,34 +29,17 @@ export async function POST(request: Request) {
 
     const { datasetId, query } = parsed.data
 
-    // Atomically increment usage and check limit to prevent TOCTOU race
+    // Check quota limit (but don't decrement yet — wait until dataset is validated)
     const subscription = await prisma.subscription.findUnique({
       where: { userId: session.user.id },
     })
 
-    if (subscription) {
-      if (subscription.queriesLimit !== -1) {
-        const updated = await prisma.subscription.updateMany({
-          where: {
-            userId: session.user.id,
-            OR: [
-              { queriesLimit: -1 },
-              { queriesUsed: { lt: subscription.queriesLimit } },
-            ],
-          },
-          data: { queriesUsed: { increment: 1 } },
-        })
-        if (updated.count === 0) {
-          return NextResponse.json(
-            { error: "Query limit reached. Upgrade your plan for more queries." },
-            { status: 429 },
-          )
-        }
-      } else {
-        await prisma.subscription.update({
-          where: { userId: session.user.id },
-          data: { queriesUsed: { increment: 1 } },
-        })
+    if (subscription && subscription.queriesLimit !== -1) {
+      if (subscription.queriesUsed >= subscription.queriesLimit) {
+        return NextResponse.json(
+          { error: "Query limit reached. Upgrade your plan for more queries." },
+          { status: 429 },
+        )
       }
     }
 
@@ -82,6 +65,33 @@ export async function POST(request: Request) {
     const format = getFileFormat(dataset.fileName)
     const content = format === "xlsx" || format === "xls" ? await res.arrayBuffer() : await res.text()
     const { rows, columns } = parseFile(content, format)
+
+    // Atomically increment usage just before the AI call
+    if (subscription) {
+      if (subscription.queriesLimit !== -1) {
+        const updated = await prisma.subscription.updateMany({
+          where: {
+            userId: session.user.id,
+            OR: [
+              { queriesLimit: -1 },
+              { queriesUsed: { lt: subscription.queriesLimit } },
+            ],
+          },
+          data: { queriesUsed: { increment: 1 } },
+        })
+        if (updated.count === 0) {
+          return NextResponse.json(
+            { error: "Query limit reached. Upgrade your plan for more queries." },
+            { status: 429 },
+          )
+        }
+      } else {
+        await prisma.subscription.update({
+          where: { userId: session.user.id },
+          data: { queriesUsed: { increment: 1 } },
+        })
+      }
+    }
 
     const result = await queryData(columns, rows.slice(0, 500), query, dataset.rowCount)
 

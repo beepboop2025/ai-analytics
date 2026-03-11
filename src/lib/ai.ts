@@ -3,6 +3,33 @@ import type { AIAnalysisResult, DatasetColumn } from "@/types"
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! })
 
+/**
+ * Strip markdown code fences (```json ... ```) and parse JSON safely.
+ * Returns a structured error result if parsing fails.
+ */
+function safeParseJSON(text: string): AIAnalysisResult {
+  // Strip markdown code fences if present
+  let cleaned = text.trim()
+  cleaned = cleaned.replace(/^```(?:json)?\s*\n?/i, "").replace(/\n?\s*```\s*$/, "")
+  cleaned = cleaned.trim()
+
+  try {
+    return JSON.parse(cleaned) as AIAnalysisResult
+  } catch {
+    return {
+      insights: [
+        {
+          title: "Parsing Error",
+          description: "The AI response could not be parsed as valid JSON. Please try again.",
+          importance: "high",
+        },
+      ],
+      charts: [],
+      summary: cleaned || "No response received from AI.",
+    }
+  }
+}
+
 const SYSTEM_PROMPT = `You are an expert data analyst. You analyze datasets and provide insights in structured JSON format.
 
 Your responses MUST be valid JSON with this exact structure:
@@ -56,7 +83,7 @@ ${JSON.stringify(sampleRows.slice(0, 50), null, 2)}`
   })
 
   const text = message.content[0].type === "text" ? message.content[0].text : ""
-  return JSON.parse(text) as AIAnalysisResult
+  return safeParseJSON(text)
 }
 
 export async function queryData(
@@ -85,7 +112,7 @@ ${JSON.stringify(sampleRows.slice(0, 50), null, 2)}`
   })
 
   const text = message.content[0].type === "text" ? message.content[0].text : ""
-  return JSON.parse(text) as AIAnalysisResult
+  return safeParseJSON(text)
 }
 
 export async function generateReport(
@@ -114,5 +141,5 @@ Create a unified report that synthesizes all findings, removes duplicates, and p
   })
 
   const text = message.content[0].type === "text" ? message.content[0].text : ""
-  return JSON.parse(text) as AIAnalysisResult
+  return safeParseJSON(text)
 }

@@ -1,6 +1,5 @@
 import Script from "next/script"
-
-const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID
+import { GTM_ID } from "@/lib/analytics/gtm"
 
 export function GTMScript() {
   if (!GTM_ID) return null

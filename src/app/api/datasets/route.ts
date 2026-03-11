@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { del } from "@vercel/blob"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { checkRateLimit, getClientIp, rateLimitResponse } from "@/lib/rate-limit"
@@ -58,6 +59,9 @@ export async function DELETE(request: Request) {
     if (!dataset) {
       return NextResponse.json({ error: "Dataset not found" }, { status: 404 })
     }
+
+    // Delete the blob file from Vercel storage
+    try { await del(dataset.fileUrl) } catch {}
 
     // Delete associated reports first, then the dataset
     await prisma.report.deleteMany({ where: { datasetId: id } })
