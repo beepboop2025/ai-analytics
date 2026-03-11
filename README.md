@@ -1,183 +1,114 @@
 # DataLens AI
 
-**Drop in your data. Ask questions in plain English. Get AI-powered insights, charts, and executive summaries.**
+**AI-powered analytics platform that turns raw data into actionable insights in seconds.**
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)
-![Claude](https://img.shields.io/badge/Claude-Sonnet_4-blueviolet.svg)
+![React](https://img.shields.io/badge/React-19-61DAFB.svg)
 ![Prisma](https://img.shields.io/badge/Prisma-7-2D3748.svg)
 ![Stripe](https://img.shields.io/badge/Stripe-Billing-635BFF.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
-
-<!-- Add screenshot or demo GIF here -->
-> Replace this with a screenshot showing the analysis interface with an AI-generated chart and insights panel
-
----
-
-## The Problem
-
-Business teams export CSVs from their tools, open them in spreadsheets, and spend hours building charts and writing summaries. Data analysts are backlogged. Dashboards are rigid.
-
-**DataLens AI turns any CSV or Excel file into actionable insights** — upload your data, ask a question in plain English, and get AI-generated charts, statistical analysis, and board-ready narratives. Powered by Claude Sonnet 4.
-
----
-
-## Table of Contents
-
-- [Features](#features)
-- [Quick Start](#quick-start)
-- [Architecture](#architecture)
-- [Tech Stack](#tech-stack)
-- [Configuration](#configuration)
-- [Pricing](#pricing)
-- [Roadmap](#roadmap)
-- [License](#license)
 
 ---
 
 ## Features
 
-| | Feature | Description |
-|---|---------|-------------|
-| :brain: | **Natural Language Queries** | Ask questions about your data in plain English — Claude generates insights |
-| :bar_chart: | **Auto-Generated Charts** | Bar, line, area, pie, scatter charts created from your data automatically |
-| :page_facing_up: | **Executive Summaries** | AI-written narratives with importance-ranked insights |
-| :open_file_folder: | **Multi-Format Upload** | CSV, Excel (XLSX/XLS), JSON with automatic schema detection |
-| :chart_with_upwards_trend: | **Time-Series Forecasting** | ARIMA forecasting via Python data engine |
-| :credit_card: | **Stripe Billing** | Self-serve subscriptions with usage tracking |
-| :lock: | **Auth** | Email/password + Google OAuth via NextAuth.js |
-| :mag: | **Statistical Profiling** | Distributions, correlations, outliers via DuckDB + Polars |
-| :clipboard: | **Report History** | Save and revisit past analyses |
-
----
-
-## Quick Start
-
-```bash
-git clone https://github.com/beepboop2025/ai-analytics.git
-cd ai-analytics
-npm install
-
-# Set up environment
-cp .env.example .env
-# Edit .env with your API keys (see Configuration)
-
-# Initialize database
-npx prisma generate
-npx prisma migrate dev
-
-# Start development server
-npm run dev
-```
-
-Opens at `http://localhost:3000`.
-
-### Python Data Engine (Optional)
-
-```bash
-cd engine
-pip install -r requirements.txt
-python main.py
-# Runs on http://localhost:8080
-```
-
-Adds DuckDB SQL queries, statistical profiling, and ARIMA forecasting.
-
----
-
-## Architecture
-
-```mermaid
-graph TB
-    subgraph Frontend
-        A[Next.js 16 App Router] --> B[Dashboard]
-        A --> C[Dataset Manager]
-        A --> D[AI Analysis Chat]
-        A --> E[Reports]
-    end
-
-    subgraph API Layer
-        F[NextAuth.js] --> G[Auth + Sessions]
-        H[Stripe Webhooks] --> I[Billing]
-        J[/api/ai/analyze] --> K[Claude Sonnet 4]
-        L[/api/datasets] --> M[Vercel Blob Storage]
-    end
-
-    subgraph Data Engine
-        N[Python FastAPI] --> O[DuckDB]
-        N --> P[Polars + Pandas]
-        N --> Q[ARIMA Forecast]
-    end
-
-    subgraph Storage
-        R[(PostgreSQL)] --> A
-        M --> A
-    end
-
-    A --> F
-    A --> J
-    A --> L
-```
+- **Natural Language Queries** -- Ask questions about your data in plain English. Claude and OpenAI models interpret your intent and return structured insights.
+- **Automated Chart Generation** -- Bar, line, area, pie, and scatter visualizations generated directly from uploaded datasets with no manual configuration.
+- **Executive Summaries** -- AI-written narratives that highlight key trends, anomalies, and ranked findings suitable for stakeholder reporting.
+- **Multi-Format Data Upload** -- Supports CSV, Excel (XLSX/XLS), and JSON files with automatic schema detection and validation.
+- **Time-Series Forecasting** -- ARIMA-based forecasting powered by a Python data engine with DuckDB and Polars for statistical profiling.
+- **Subscription Billing** -- Self-serve subscription tiers (Free, Pro, Enterprise) managed through Stripe Checkout with usage tracking and webhook-driven lifecycle management.
+- **Authentication** -- Email/password and Google OAuth via NextAuth.js 5, with email verification, password reset, and account deletion flows.
+- **Statistical Profiling** -- Distribution analysis, correlation matrices, and outlier detection via DuckDB and Polars.
+- **Report History** -- Save, revisit, and compare past analyses across datasets.
+- **Glassmorphism UI** -- Modern interface with frosted-glass panels, gradient animations, and responsive design built on Tailwind CSS 4.
 
 ---
 
 ## Tech Stack
 
 | Layer | Technology |
-|-------|-----------|
+|-------|------------|
 | Frontend | Next.js 16, React 19, Tailwind CSS 4, Recharts |
-| AI | Anthropic Claude Sonnet 4 |
+| AI | Anthropic Claude, OpenAI |
 | Auth | NextAuth.js 5 (Google OAuth + credentials) |
-| Database | Prisma 7 + PostgreSQL |
+| Database | Prisma 7, PostgreSQL |
 | File Storage | Vercel Blob |
 | Billing | Stripe (subscriptions + webhooks) |
 | Data Engine | Python FastAPI, DuckDB, Polars, statsmodels |
-| Email | Resend (verification, password reset) |
-| Analytics | PostHog, Google Tag Manager |
-| Deploy | Vercel, Netlify, or Docker |
+| Email | Resend |
+| Deployment | Vercel, Netlify, or Docker |
 
 ---
 
-## Configuration
+## Getting Started
 
-Required environment variables (`.env`):
+### Prerequisites
 
-| Variable | Service | Required |
-|----------|---------|:--------:|
-| `DATABASE_URL` | PostgreSQL (Neon or local) | Yes |
-| `NEXTAUTH_SECRET` | Session encryption | Yes |
-| `ANTHROPIC_API_KEY` | Claude AI analysis | Yes |
-| `GOOGLE_CLIENT_ID` | Google OAuth | Yes |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth | Yes |
-| `BLOB_READ_WRITE_TOKEN` | Vercel Blob file storage | Yes |
-| `STRIPE_SECRET_KEY` | Billing | For billing |
-| `STRIPE_WEBHOOK_SECRET` | Stripe webhooks | For billing |
-| `RESEND_API_KEY` | Email (verification, reset) | For email |
-| `NEXT_PUBLIC_POSTHOG_KEY` | Product analytics | No |
+- Node.js 18+
+- PostgreSQL instance (local or hosted, e.g. Neon)
+- Anthropic and/or OpenAI API key
+- Stripe account (for billing features)
 
----
+### Installation
 
-## Pricing
+```bash
+git clone https://github.com/beepboop2025/ai-analytics.git
+cd ai-analytics
+npm install
+```
 
-| Plan | Price | Queries/mo | Datasets | File Size |
-|------|-------|:----------:|:--------:|:---------:|
-| **Free** | $0 | 10 | 3 | 5 MB |
-| **Pro** | $29/mo | 500 | 50 | 50 MB |
-| **Enterprise** | $99/mo | Unlimited | Unlimited | 500 MB |
+### Environment Setup
 
-Usage counters reset monthly. Stripe checkout handles subscriptions.
+Copy the example environment file and fill in your credentials:
 
----
+```bash
+cp .env.example .env
+```
 
-## Roadmap
+Required variables:
 
-- [ ] Team workspaces with shared datasets and reports
-- [ ] API key generation for programmatic access
-- [ ] Custom chart templates and saved visualizations
-- [ ] Scheduled reports (daily/weekly email digests)
-- [ ] Data connectors (Google Sheets, Airtable, databases)
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | PostgreSQL connection string |
+| `NEXTAUTH_SECRET` | Session encryption key |
+| `ANTHROPIC_API_KEY` | Claude API key for AI analysis |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Blob storage token |
+| `STRIPE_SECRET_KEY` | Stripe secret key (for billing) |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret |
+| `RESEND_API_KEY` | Resend API key (for email flows) |
+
+### Database Migration
+
+```bash
+npx prisma generate
+npx prisma migrate dev
+```
+
+### Start the Development Server
+
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:3000`.
+
+### Python Data Engine (Optional)
+
+For advanced statistical profiling and time-series forecasting:
+
+```bash
+cd engine
+pip install -r requirements.txt
+python main.py
+```
+
+The data engine runs on `http://localhost:8080` and provides DuckDB SQL queries, distribution profiling, and ARIMA forecasting.
 
 ---
 
 ## License
 
-MIT
+This project is licensed under the [MIT License](LICENSE).
