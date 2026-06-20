@@ -1,3 +1,8 @@
+<!-- textura-banner -->
+<div align="center">
+  <a href="https://github.com/beepboop2025/ai-analytics"><img src="./banner.svg" width="100%" alt="ai-analytics" /></a>
+</div>
+
 # DataLens AI
 
 **AI-powered analytics platform that turns raw data into actionable insights in seconds.**
