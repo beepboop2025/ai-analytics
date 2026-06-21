@@ -1,0 +1,38 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Install only what the test suite needs. The full app pulls heavy native
+      # deps (prisma client generation, etc.) that the pure-logic tests do not
+      # require, so we install the minimal runtime + test tooling directly.
+      - name: Install test dependencies
+        run: |
+          npm install --no-save \
+            vitest@^2 @vitest/coverage-v8@^2 \
+            papaparse@^5.5.3 @types/papaparse@^5.5.2 \
+            xlsx@^0.18.5 \
+            clsx@^2.1.1 tailwind-merge@^3.4.1 \
+            typescript@^5
+
+      - name: Run tests with coverage
+        run: npx vitest run --coverage
+
+      - name: Print coverage summary
+        if: always()
+        run: |
+          if [ -f coverage/coverage-summary.json ]; then
+            node -e "const c=require('./coverage/coverage-summary.json').total;console.log('Coverage (lines): '+c.lines.pct+'%');"
+          fi
