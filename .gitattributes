@@ -2,8 +2,6 @@
 
 # Mark generated/vendored files so they don't skew language stats
 package-lock.json linguist-generated=true
-AI-Analytics-SaaS-Plan.html linguist-generated=true
-AI-Analytics-SaaS-Plan.pdf linguist-generated=true
 
 # Ensure TypeScript and CSS are detected
 *.ts linguist-language=TypeScript

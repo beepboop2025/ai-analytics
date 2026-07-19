@@ -11,7 +11,7 @@
 ![React](https://img.shields.io/badge/React-19-61DAFB.svg)
 ![Prisma](https://img.shields.io/badge/Prisma-7-2D3748.svg)
 ![Stripe](https://img.shields.io/badge/Stripe-Billing-635BFF.svg)
-![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![License: Source-Available](https://img.shields.io/badge/License-Source--Available-orange.svg)
 
 ---
 
@@ -65,13 +65,7 @@ npm install
 
 ### Environment Setup
 
-Copy the example environment file and fill in your credentials:
-
-```bash
-cp .env.example .env
-```
-
-Required variables:
+Create a `.env` file in the project root with the following variables:
 
 | Variable | Description |
 |----------|-------------|
@@ -116,4 +110,4 @@ The data engine runs on `http://localhost:8080` and provides DuckDB SQL queries,
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+Source-available — free to view, study, and run locally for non-commercial use. Commercial use requires a separate license. See [LICENSE.md](LICENSE.md) for the full terms.
