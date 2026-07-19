@@ -1,3 +1,6 @@
+![tests](https://github.com/beepboop2025/ai-analytics/actions/workflows/tests.yml/badge.svg)
+![coverage](https://img.shields.io/badge/coverage-88%25-brightgreen)
+
 <!-- textura-banner -->
 <div align="center">
   <a href="https://github.com/beepboop2025/ai-analytics"><img src="./banner.svg" width="100%" alt="ai-analytics" /></a>
@@ -105,6 +108,22 @@ python main.py
 ```
 
 The data engine runs on `http://localhost:8080` and provides DuckDB SQL queries, distribution profiling, and ARIMA forecasting.
+
+---
+
+## Testing
+
+Core pure-logic modules (the sliding-window rate limiter, dataset parsers /
+column-type inference, and the Tailwind class merger) are covered by a
+Vitest suite that runs with no network, database, or API keys.
+
+```bash
+npm run test            # run the suite
+npm run test:coverage   # run with a coverage report
+```
+
+The suite (32 tests) covers ~89% of the tested modules and runs in CI on every
+push and pull request via [`.github/workflows/tests.yml`](.github/workflows/tests.yml).
 
 ---
 
