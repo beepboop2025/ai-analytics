@@ -5,7 +5,7 @@
 
 # DataLens AI
 
-**AI-powered analytics platform that turns raw data into actionable insights in seconds.**
+Analyze CSV, Excel, and JSON files with statistical profiles, charts, time-series forecasts, and optional model-generated summaries.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)
 ![React](https://img.shields.io/badge/React-19-61DAFB.svg)
@@ -17,16 +17,16 @@
 
 ## Features
 
-- **Natural Language Queries** -- Ask questions about your data in plain English. Claude and OpenAI models interpret your intent and return structured insights.
-- **Automated Chart Generation** -- Bar, line, area, pie, and scatter visualizations generated directly from uploaded datasets with no manual configuration.
-- **Executive Summaries** -- AI-written narratives that highlight key trends, anomalies, and ranked findings suitable for stakeholder reporting.
+- **Model-assisted queries** -- Ask questions in plain language and receive a structured analysis generated from the uploaded dataset.
+- **Chart generation** -- Create bar, line, area, pie, and scatter visualizations from uploaded datasets.
+- **Generated summaries** -- Draft narratives that identify trends, anomalies, and ranked findings; review them against the underlying data before use.
 - **Multi-Format Data Upload** -- Supports CSV, Excel (XLSX/XLS), and JSON files with automatic schema detection and validation.
 - **Time-Series Forecasting** -- ARIMA-based forecasting powered by a Python data engine with DuckDB and Polars for statistical profiling.
 - **Subscription Billing** -- Self-serve subscription tiers (Free, Pro, Enterprise) managed through Stripe Checkout with usage tracking and webhook-driven lifecycle management.
 - **Authentication** -- Email/password and Google OAuth via NextAuth.js 5, with email verification, password reset, and account deletion flows.
 - **Statistical Profiling** -- Distribution analysis, correlation matrices, and outlier detection via DuckDB and Polars.
 - **Report History** -- Save, revisit, and compare past analyses across datasets.
-- **Glassmorphism UI** -- Modern interface with frosted-glass panels, gradient animations, and responsive design built on Tailwind CSS 4.
+- **Responsive interface** -- Dataset, chart, and report views built with Tailwind CSS 4.
 
 ---
 
@@ -35,7 +35,7 @@
 | Layer | Technology |
 |-------|------------|
 | Frontend | Next.js 16, React 19, Tailwind CSS 4, Recharts |
-| AI | Anthropic Claude, OpenAI |
+| Model providers | Anthropic Claude, OpenAI |
 | Auth | NextAuth.js 5 (Google OAuth + credentials) |
 | Database | Prisma 7, PostgreSQL |
 | File Storage | Vercel Blob |
@@ -71,7 +71,7 @@ Create a `.env` file in the project root with the following variables:
 |----------|-------------|
 | `DATABASE_URL` | PostgreSQL connection string |
 | `NEXTAUTH_SECRET` | Session encryption key |
-| `ANTHROPIC_API_KEY` | Claude API key for AI analysis |
+| `ANTHROPIC_API_KEY` | Claude API key for model-assisted analysis |
 | `GOOGLE_CLIENT_ID` | Google OAuth client ID |
 | `GOOGLE_CLIENT_SECRET` | Google OAuth client secret |
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob storage token |

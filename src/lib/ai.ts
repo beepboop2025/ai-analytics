@@ -50,7 +50,8 @@ Your responses MUST be valid JSON with this exact structure:
 }
 
 Guidelines:
-- Provide 2-5 actionable insights based on the data
+- Provide 2-5 specific findings based on the supplied data
+- In each finding, name the relevant fields or aggregate values and note sampling limits
 - Suggest 1-3 charts that best visualize key findings
 - Chart data should be aggregated/summarized, not raw rows
 - Keep chart data arrays to 20 items max for readability

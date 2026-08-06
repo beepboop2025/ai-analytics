@@ -56,14 +56,14 @@ export function CTA() {
           <div className="relative grid gap-10 px-6 py-10 sm:px-10 lg:grid-cols-[1fr_0.95fr] lg:px-12 lg:py-14">
             <div>
               <div className="eyebrow border-white/15 bg-white/5 text-white/75">
-                Production-ready workspace
+                Dataset analysis workspace
               </div>
               <h2 className="mt-6 text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-                Give every operator a faster path from spreadsheet to decision.
+                Move from spreadsheet to reviewed analysis.
               </h2>
               <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">
-                DataLens AI already combines dataset ingestion, AI analysis, reports, plan controls,
-                and billing. What it needs is your data and your operating rhythm.
+                DataLens combines dataset ingestion, statistical analysis, charts, reports,
+                access controls, and billing. Generated findings should be checked against the source data.
               </p>
               <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row">
                 <Button
