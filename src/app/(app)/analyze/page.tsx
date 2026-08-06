@@ -197,7 +197,7 @@ export default function AnalyzePage() {
               </div>
               <h3 className="mt-5 text-lg font-semibold">Start analyzing your data</h3>
               <p className="mt-2 max-w-md text-sm text-muted-foreground">
-                Select a dataset and ask a question to get AI-powered insights, charts, and narrative summaries.
+                Select a dataset and ask a question to generate findings, charts, and a summary for review.
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-2">
                 {["What are the main trends?", "Show me a summary", "What patterns do you see?"].map((q) => (

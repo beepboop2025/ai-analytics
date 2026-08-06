@@ -16,11 +16,11 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "DataLens AI | Decision Intelligence for Ops Teams",
+    default: "DataLens AI | Dataset analysis and reporting",
     template: "%s | DataLens AI",
   },
   description:
-    "Upload operational datasets, ask questions in plain English, and turn raw exports into executive-ready summaries, charts, and reports.",
+    "Analyze CSV, Excel, and JSON datasets with statistical profiles, charts, forecasts, and optional model-generated summaries.",
   keywords: [
     "AI analytics",
     "decision intelligence",
@@ -33,9 +33,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "DataLens AI",
-    title: "DataLens AI | Decision Intelligence for Ops Teams",
+    title: "DataLens AI | Dataset analysis and reporting",
     description:
-      "A production-ready analytics workspace for finance, revenue ops, and product teams working from exports and operational data.",
+      "Statistical profiles, charts, forecasts, and reviewable model-generated summaries for uploaded operational data.",
   },
   twitter: {
     card: "summary_large_image",
